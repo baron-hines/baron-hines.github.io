@@ -4,8 +4,8 @@
 //
 // Each page passes the section it already shows, and the rail shows the other
 // one, so it never repeats what is beside it.
-//   <SideRail exclude="projects" />  -> active projects
-//   <SideRail exclude="blog" />      -> latest posts
+//   <SideRail exclude="blog" />      -> active projects (the page shows posts)
+//   <SideRail exclude="projects" />  -> latest posts (the page shows projects)
 import Status from "./Status.astro";
 import { formatDate, posts, projects } from "../lib/content";
 
@@ -28,7 +28,7 @@ const latestPosts = (await posts()).slice(0, 3);
 
 <aside class="rail">
   {
-    exclude === "projects" ? (
+    exclude === "blog" ? (
       projectItems.length > 0 && (
         <>
           <h2 class="section-label">{projectHeading}</h2>

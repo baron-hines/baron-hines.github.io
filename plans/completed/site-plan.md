@@ -108,6 +108,15 @@ Proposed 2026-11-26, for the owner's review.
 ## Later changes
 
 - **2026-11-27 (owner):** the Setups section is removed. The site has two sections, Blog and Projects. The home page shows only the latest posts. oscar-wallpaper is listed as a project, and its two pages keep their URLs (D2).
+- **2026-11-27:** the home page, `/blog/` and `/projects/` get a **side rail**, so the home page reflects both sections rather than posts alone. `SideRail.astro` takes an `exclude` prop naming the section the page already shows and renders the other one, so no page lists the same content twice. `/projects/` shows the three newest posts; `/` and `/blog/` show active projects, falling back to the most recently finished ones under a "Recently finished" heading when nothing is active, so a finished project can't collapse the two-column layout. `BaseLayout` gains a `wide` prop (`.container--wide`, 66rem) for the three two-column pages; articles keep 44rem. Rail cards reuse the existing `--card-*` tokens, so both themes work with no dark-mode-specific CSS.
+
+  Two things this got wrong, both caught by reading the built HTML rather than by `astro check`:
+  - The `exclude` condition was inverted, so `/projects/` rendered its own list a second time in the rail instead of the posts. `check` passed the whole time.
+  - A failed edit left the conditional unbalanced, which `check` did catch.
+
+  Both are why the rule below exists: a template can type-check and still render the wrong thing, so a UI change is not verified until a page has been built and looked at.
+
+  *Merged 2026-11-27* in [#12](https://github.com/baron-hines/baron-hines.github.io/pull/12).
 
 ## Open questions
 

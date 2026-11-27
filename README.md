@@ -25,6 +25,16 @@ git clone --recurse-submodules https://github.com/baron-hines/baron-hines.github
 
 In a clone made without it, run `git submodule update --init` once. Without the submodule the build stops with "The themes repo has no neon-terminal/README.md".
 
+A **worktree** — `git worktree add`, or a `.claude/worktrees/` checkout — is a fresh working tree, so it starts with `themes/` empty and git submodule commands it runs are confined to it. You may also find `npm ci` has not been run there and the usual tools are missing. Before you can build or see a page in a worktree:
+
+```powershell
+git submodule update --init themes
+npm ci
+npm run dev
+```
+
+A worktree is fine for editing and for `npm run check`. It is **not** enough to prove a change works: `check` type-checks templates, but it cannot tell you a page rendered the wrong thing. Do not merge a UI change on `check` alone — build and look at the page first (`npm run build && npm run preview`, or `npm run dev`), in light and dark and at a narrow width.
+
 Node comes from `.nvmrc` (the current LTS). Then:
 
 ```powershell
@@ -156,6 +166,8 @@ Each of them passes `exclude`, naming the section it already shows, and the rail
 Articles and the other pages keep the narrower reading width; the layout uses `.container--wide` on `BaseLayout` (`wide` prop). Below 60rem the rail drops under the list and its cards go two-up; below 34rem they stack.
 
 The rail is a list of cards, so it does not need a page of its own to be useful — it is the same `projects()` and `posts()` helpers from [`src/lib/content.ts`](src/lib/content.ts) that the index pages use, filtered.
+
+`exclude` names the section the page **already shows**, and the rail renders the other one. That is deliberate: naming the opposite makes a page physically unable to ask the rail for the list it is already showing, so the same content cannot appear twice. (It was written the other way round at first and `/projects/` listed its own projects in the rail. `astro check` passed. Build the page and look at it.)
 
 ## Themes
 
