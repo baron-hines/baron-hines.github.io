@@ -1,5 +1,5 @@
 // The site's three sections. Each Markdown file's front matter is checked
-// against these schemas at build time (plans/in-progress/site-plan.md, D3).
+// against these schemas at build time (plans/completed/site-plan.md, D3).
 import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
