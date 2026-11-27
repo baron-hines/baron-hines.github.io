@@ -1,0 +1,155 @@
+/*
+ * Site theme: Tidewater in light mode, Neon Terminal in dark mode.
+ *
+ * The mode follows the OS setting (prefers-color-scheme) unless the visitor
+ * picks one with the toggle, which sets data-theme="light" or "dark" on <html>
+ * (see theme.js). Token values come from the Tidewater and Neon Terminal
+ * design systems' tokens.css.
+ */
+
+/* ---- Tidewater (light, the default) ---- */
+:root {
+  color-scheme: light;
+
+  --bg: #f7fbfc;              /* ground */
+  --bg-texture: none;
+  --surface: #ffffff;
+  --border: #d5e4e8;
+  --fg: #0b2530;              /* ink */
+  --fg-muted: #4a6670;        /* muted */
+  --heading: #0b2530;
+  --link: #0e7490;            /* cyan-700, the brand color */
+  --link-hover: #155e75;      /* cyan-800 */
+  --focus-ring: 0 0 0 2px #f7fbfc, 0 0 0 4px #0891b2;  /* ground gap + cyan-600 ring */
+  --focus-outline: none;
+  --focus-offset: 0;
+
+  --font-heading: "Sora", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --font-label: "IBM Plex Mono", ui-monospace, monospace;
+  --body-size: 16px;
+  --body-leading: 25px;
+  --h1: 600 40px/44px var(--font-heading);
+  --h1-tracking: -0.02em;
+  --h2: 600 28px/34px var(--font-heading);
+  --h2-tracking: -0.01em;
+  --heading-case: none;
+  --radius: 6px;
+}
+
+/* ---- Neon Terminal (dark) ----
+ * Repeated twice because CSS can't share one block between a media query and
+ * an attribute selector: once for "OS says dark and no light override", once
+ * for an explicit dark choice.
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --bg: #05080a;            /* void */
+    --bg-texture: repeating-linear-gradient(to bottom, rgba(0, 240, 255, 0.035) 0 1px, transparent 1px 4px);
+    --surface: #0b1216;       /* panel */
+    --border: #1b3a45;        /* line */
+    --fg: #c7f9ff;            /* text */
+    --fg-muted: #6fa3ad;      /* dim */
+    --heading: #00f0ff;       /* cyan */
+    --link: #00f0ff;
+    --link-hover: #00b8c9;    /* cyan-hover */
+    --focus-ring: none;
+    --focus-outline: 2px solid #fcee0a;  /* acid */
+    --focus-offset: 3px;
+
+    --font-heading: "Chakra Petch", system-ui, sans-serif;
+    --font-body: "JetBrains Mono", ui-monospace, monospace;
+    --font-label: "JetBrains Mono", ui-monospace, monospace;
+    --body-size: 15px;
+    --body-leading: 24px;
+    --h1: 700 40px/44px var(--font-heading);
+    --h1-tracking: 0.02em;
+    --h2: 600 26px/31px var(--font-heading);
+    --h2-tracking: 0;
+    --heading-case: uppercase;
+    --radius: 0;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #05080a;
+  --bg-texture: repeating-linear-gradient(to bottom, rgba(0, 240, 255, 0.035) 0 1px, transparent 1px 4px);
+  --surface: #0b1216;
+  --border: #1b3a45;
+  --fg: #c7f9ff;
+  --fg-muted: #6fa3ad;
+  --heading: #00f0ff;
+  --link: #00f0ff;
+  --link-hover: #00b8c9;
+  --focus-ring: none;
+  --focus-outline: 2px solid #fcee0a;
+  --focus-offset: 3px;
+
+  --font-heading: "Chakra Petch", system-ui, sans-serif;
+  --font-body: "JetBrains Mono", ui-monospace, monospace;
+  --font-label: "JetBrains Mono", ui-monospace, monospace;
+  --body-size: 15px;
+  --body-leading: 24px;
+  --h1: 700 40px/44px var(--font-heading);
+  --h1-tracking: 0.02em;
+  --h2: 600 26px/31px var(--font-heading);
+  --h2-tracking: 0;
+  --heading-case: uppercase;
+  --radius: 0;
+}
+
+/* ---- Page styles, written against the tokens above ---- */
+* { box-sizing: border-box; }
+
+html { background: var(--bg); }
+
+body {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 64px 16px;
+  font: 400 var(--body-size)/var(--body-leading) var(--font-body);
+  color: var(--fg);
+  background: var(--bg-texture), var(--bg);
+  min-height: 100vh;
+}
+
+h1, h2 {
+  color: var(--heading);
+  text-transform: var(--heading-case);
+  overflow-wrap: anywhere;
+}
+h1 { font: var(--h1); letter-spacing: var(--h1-tracking); margin: 0 0 32px; }
+h2 { font: var(--h2); letter-spacing: var(--h2-tracking); margin: 48px 0 16px; }
+
+p, ul { margin: 0 0 16px; }
+
+a { color: var(--link); text-underline-offset: 3px; }
+a:hover { color: var(--link-hover); }
+
+a:focus-visible,
+button:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-offset);
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius);
+}
+
+/* Light/dark toggle, top right */
+.theme-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  padding: 6px 12px;
+  font: 500 12px/16px var(--font-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--link);
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.theme-toggle:hover { color: var(--link-hover); border-color: var(--link); }
