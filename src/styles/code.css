@@ -1,7 +1,7 @@
 /*
  * Code blocks and Mermaid diagrams. Colors come from the --astro-code-* and
  * --diagram-* tokens in theme.css, so both switch with the light/dark toggle
- * (plans/in-progress/site-plan.md, D6a and D6b).
+ * (plans/completed/site-plan.md, D6a and D6b).
  */
 
 :not(pre) > code {

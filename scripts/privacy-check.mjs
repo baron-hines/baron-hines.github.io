@@ -1,6 +1,6 @@
 // Fails if the built site contains details that must never be published:
 // private IPv4 addresses, email addresses or token prefixes.
-// See plans/in-progress/site-plan.md, D7.
+// See plans/completed/site-plan.md, D7.
 //
 // Usage: node scripts/privacy-check.mjs <dir>
 

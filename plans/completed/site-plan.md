@@ -99,9 +99,11 @@ Proposed 2026-11-26, for the owner's review.
 3. **(owner)** Review and approve. The agent merges once approved and green.
 
 - [x] The owner picked the projects: **AI coding stack** (one entry for LiteLLM, n8n, the models and the coding agent; the owner merges this one), and **themes** and **kiosk** as placeholders with no source links, since both repos stay private for now. The Ruby and Roundhouse repos are left out for now.
-- [ ] The Local AI stack page passes D7's check and the owner's review, and is live.
+- [x] The Local AI stack page passes D7's check and the owner's review, and is live.
 
 *Changed 2026-11-26 (owner):* no setup page and no first post for now. The "How my AI is strung together" draft is folded into the AI coding stack project page, which is renamed **Local AI stack** (`/projects/local-ai-stack/`), and the "Theming this site" post is dropped. Blog and Setups show their empty states until there's something to put in them.
+
+*Done 2026-11-27* in [#5](https://github.com/baron-hines/baron-hines.github.io/pull/5), merged by the owner. `/projects/local-ai-stack/`, `/projects/themes/` and `/projects/kiosk/` are live, and the Local AI stack page's two diagrams draw on the live site.
 
 ## Open questions
 
@@ -127,4 +129,4 @@ Proposed 2026-11-26, for the owner's review.
 
 - [x] Phase 1: Astro in place, Pages deploys from Actions, existing URLs unchanged
 - [x] Phase 2: sections, components and extras merged; checked in both modes and at phone width
-- [ ] **(owner)** Phase 3: projects picked; Local AI stack page approved and live
+- [x] **(owner)** Phase 3: projects picked; Local AI stack page approved and live

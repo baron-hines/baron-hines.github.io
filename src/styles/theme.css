@@ -5,7 +5,7 @@
  * picks one with the toggle, which sets data-theme="light" or "dark" on <html>
  * (see public/theme.js). Token values come from the Tidewater and Neon Terminal
  * design systems' tokens.css. Components only use the tokens below, so they
- * work in both modes (plans/in-progress/site-plan.md, D4).
+ * work in both modes (plans/completed/site-plan.md, D4).
  */
 
 /* ---- Tidewater (light, the default) ---- */
