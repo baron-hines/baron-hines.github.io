@@ -98,7 +98,7 @@ Proposed 2026-11-26, for the owner's review.
    - **Blog:** one first post. The default is "Theming this site", on the Tidewater/Neon Terminal pairing from [#1](https://github.com/baron-hines/baron-hines.github.io/pull/1), because it's already done and needs no new research.
 3. **(owner)** Review and approve. The agent merges once approved and green.
 
-- [ ] The owner picked the projects.
+- [x] The owner picked the projects: **AI coding stack** (one entry for LiteLLM, n8n, the models and the coding agent; the owner merges this one), and **themes** and **kiosk** as placeholders with no source links, since both repos stay private for now. The Ruby and Roundhouse repos are left out for now.
 - [ ] The setup page passes D7's check and the owner's review.
 - [ ] The first post is live and in the RSS feed.
 
