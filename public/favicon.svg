@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    /* The icon follows the OS setting only: a favicon is a separate document
+     * and can't see the site's data-theme attribute or its localStorage choice
+     * (see src/styles/theme.css for the same limitation). */
+    .a { stroke: #0E7490; }
+    .b { fill: #F7FBFC; }
+    @media (prefers-color-scheme: dark) {
+      .a { stroke: #00F0FF; }
+      .b { fill: #0B1216; }
+    }
+  </style>
+  <rect class="b" width="32" height="32" rx="6"/>
+  <rect x="4.5" y="4.5" width="23" height="23" rx="5" fill="none" class="a" stroke-width="2"/>
+  <path class="a" d="M12 10.5v11M12 16h8M20 10.5v11" fill="none" stroke-width="2.6" stroke-linecap="round"/>
+</svg>
