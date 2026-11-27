@@ -1,0 +1,12 @@
+---
+// A project's status, always as a word plus color: "● Active" in Tidewater,
+// "[ACTIVE]" in Neon Terminal. Status is never color alone (both design systems).
+interface Props {
+  status: "active" | "paused" | "done";
+}
+
+const { status } = Astro.props;
+const words = { active: "Active", paused: "Paused", done: "Done" };
+---
+
+<span class={`status status--${status}`}>{words[status]}</span>

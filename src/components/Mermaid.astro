@@ -1,0 +1,59 @@
+---
+// Renders ```mermaid blocks in the browser, colored from the theme tokens and
+// redrawn when the theme changes. Pages include this only when their Markdown
+// has a Mermaid block, so other pages never download Mermaid (site-plan D6b).
+---
+
+<script>
+  (async () => {
+    const blocks = [...document.querySelectorAll<HTMLElement>("pre > code.language-mermaid")];
+    if (blocks.length === 0) return;
+
+    const { default: mermaid } = await import("mermaid");
+
+    const figures = blocks.map((code) => {
+      const figure = document.createElement("figure");
+      figure.className = "diagram";
+      figure.dataset.source = code.textContent ?? "";
+      code.parentElement!.replaceWith(figure);
+      return figure;
+    });
+
+    let count = 0;
+    async function draw() {
+      const css = getComputedStyle(document.documentElement);
+      const token = (name: string) => css.getPropertyValue(name).trim();
+      const font = token("--font-body");
+      mermaid.initialize({
+        startOnLoad: false,
+        securityLevel: "strict",
+        theme: "base",
+        fontFamily: font,
+        themeVariables: {
+          fontFamily: font,
+          fontSize: "14px",
+          background: token("--surface"),
+          primaryColor: token("--diagram-node"),
+          primaryTextColor: token("--fg"),
+          primaryBorderColor: token("--diagram-line"),
+          secondaryColor: token("--surface-subtle"),
+          tertiaryColor: token("--surface"),
+          lineColor: token("--diagram-line"),
+          textColor: token("--fg"),
+          edgeLabelBackground: token("--surface"),
+          clusterBkg: token("--surface-subtle"),
+          clusterBorder: token("--border"),
+        },
+      });
+      for (const figure of figures) {
+        const { svg } = await mermaid.render(`diagram-${count++}`, figure.dataset.source!);
+        figure.innerHTML = svg;
+      }
+    }
+
+    // Text is measured when drawn, so wait for the web fonts first.
+    await document.fonts.ready;
+    await draw();
+    document.addEventListener("themechange", () => void draw());
+  })();
+</script>

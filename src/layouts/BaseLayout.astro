@@ -1,11 +1,28 @@
 ---
 import "../styles/theme.css";
+import "../styles/code.css";
 
 interface Props {
   title: string;
+  /** Used for the meta description and link previews (site-plan D6e). */
+  description?: string;
+  /** "article" for posts, setups and projects; "website" otherwise. */
+  type?: "website" | "article";
 }
 
-const { title } = Astro.props;
+const SITE = "baron-hines";
+const { title, description = "Notes, setups and projects.", type = "website" } = Astro.props;
+const fullTitle = title === SITE ? SITE : `${title} · ${SITE}`;
+const url = new URL(Astro.url.pathname, Astro.site);
+// The dev server and the build report "/projects" and "/projects/" differently,
+// so compare with one trailing slash and no index.html.
+const path = Astro.url.pathname.replace(/index\.html$/, "").replace(/\/?$/, "/");
+
+const nav = [
+  { href: "/blog/", label: "Blog" },
+  { href: "/setups/", label: "Setups" },
+  { href: "/projects/", label: "Projects" },
+];
 ---
 
 <!doctype html>
@@ -13,17 +30,57 @@ const { title } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={url} />
+    <meta property="og:site_name" content={SITE} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={url} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="theme-color" content="#f7fbfc" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#05080a" media="(prefers-color-scheme: dark)" />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE} blog`} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap.xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Sora:wght@600&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@500&family=Chakra+Petch:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Chakra+Petch:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap"
     />
     <!-- Blocking on purpose: applies the saved theme before the first paint. -->
     <script is:inline src="/theme.js"></script>
   </head>
   <body>
-    <slot />
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="container site-header__inner">
+        <a class="site-name" href="/" aria-current={path === "/" ? "page" : undefined}>{SITE}</a>
+        <nav aria-label="Sections">
+          <ul class="site-nav">
+            {
+              nav.map((item) => (
+                <li>
+                  <a href={item.href} aria-current={path.startsWith(item.href) ? "page" : undefined}>
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <button class="theme-toggle" type="button" hidden>dark</button>
+      </div>
+    </header>
+    <main id="main" class="container">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="container site-footer__inner">
+        <a href="/rss.xml">RSS</a>
+        <a href="https://github.com/baron-hines">GitHub</a>
+      </div>
+    </footer>
   </body>
 </html>

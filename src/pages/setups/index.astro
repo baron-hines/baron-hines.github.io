@@ -1,0 +1,25 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Card from "../../components/Card.astro";
+import { formatDate, setups } from "../../lib/content";
+
+const all = await setups();
+---
+
+<BaseLayout title="Setups" description="How my machines, home server and AI tooling are wired together.">
+  <h1>Setups</h1>
+  <p class="muted">How my machines, home server and AI tooling are wired together. These pages change as the setup does.</p>
+  {
+    all.length > 0 ? (
+      <ul class="cards">
+        {all.map((setup) => (
+          <Card href={`/setups/${setup.id}/`} title={setup.data.title} summary={setup.data.summary}>
+            <span>Updated <time datetime={setup.data.updated.toISOString()}>{formatDate(setup.data.updated)}</time></span>
+          </Card>
+        ))}
+      </ul>
+    ) : (
+      <p class="empty">No setups written up yet.</p>
+    )
+  }
+</BaseLayout>
