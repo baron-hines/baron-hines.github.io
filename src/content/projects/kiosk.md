@@ -1,6 +1,7 @@
 ---
 title: kiosk
 summary: A benchmark of 10 LLMs on real coding tasks, run to choose the models behind my coding agent. gpt-oss-20b won locally, DeepSeek V4.1 Flash in the cloud.
+keepCase: true
 status: done
 links:
   - label: Where the winners ended up

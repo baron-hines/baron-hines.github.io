@@ -1,0 +1,48 @@
+---
+// One page per theme in the themes repo: its design philosophy (README.md)
+// and a live showcase of every token and component (built from THEME.md).
+import { getEntry } from "astro:content";
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import ThemeShowcase from "../../../../components/ThemeShowcase.astro";
+import { loadTheme, REPO, THEMES, type ThemeInfo } from "../../../../lib/themes";
+
+export function getStaticPaths() {
+  return THEMES.map((theme) => ({ params: { theme: theme.id }, props: { theme } }));
+}
+
+const { theme } = Astro.props as { theme: ThemeInfo };
+const doc = await getEntry("themeDocs", theme.id);
+if (!doc?.rendered?.html) throw new Error(`The themes repo has no ${theme.id}/README.md`);
+
+// The README links to files beside it in the repo (THEME.md, ../tidewater/).
+// Here those would 404, so point relative links at the repo on GitHub.
+const readmeBase = `${REPO}/blob/main/${theme.id}/`;
+const readmeHtml = doc.rendered.html.replace(/href="(?![a-z]+:|#|\/)([^"]*)"/gi, (_, rel: string) => {
+  const url = new URL(rel, readmeBase).href;
+  return `href="${url.endsWith("/") ? url.replace("/blob/", "/tree/") : url}"`;
+});
+const source = loadTheme(theme.id);
+const other = THEMES.find((t) => t.id !== theme.id);
+---
+
+<BaseLayout title={theme.name} description={theme.tagline} type="article" section="/projects/">
+  {source.fontsHref && <link slot="head" rel="stylesheet" href={source.fontsHref} />}
+  <article>
+    <div class="prose" set:html={readmeHtml} />
+
+    <h2>Every piece, live</h2>
+    <p class="muted">
+      Rendered with {theme.name}'s own CSS, taken from its
+      <a href={`${REPO}/blob/main/${theme.id}/THEME.md`}><code>THEME.md</code></a>, so it shows the theme as
+      written whether this site is in light or dark mode. The components section starts with the guide's own markup
+      patterns.
+    </p>
+    <ThemeShowcase theme={theme} source={source} />
+
+    <ul>
+      <li><a href={`${REPO}/tree/main/${theme.id}`}>{theme.name} in the themes repo</a></li>
+      {other && <li><a href={`/projects/themes/${other.id}/`}>{other.name}</a>, its {other.mode} counterpart</li>}
+      <li><a href="/projects/themes/">All themes</a></li>
+    </ul>
+  </article>
+</BaseLayout>

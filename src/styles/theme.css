@@ -21,6 +21,8 @@
   --fg: #0b2530;              /* ink */
   --fg-muted: #4a6670;        /* muted */
   --heading: #0b2530;
+  --title: #0b2530;           /* the page title (h1) */
+  --title-glow: none;
   --link: #0e7490;            /* cyan-700, the brand color */
   --link-hover: #155e75;      /* cyan-800 */
   --focus-ring: 0 0 0 2px #f7fbfc, 0 0 0 4px #0891b2;  /* ground gap + cyan-600 ring */
@@ -40,6 +42,8 @@
   --h3: 600 20px/26px var(--font-heading);
   --heading-case: none;
   --radius: 6px;              /* radius-input */
+  --measure: none;            /* max line length for long text */
+  --prose-leading: 25px;
 
   /* Components */
   --card-bg: #ffffff;
@@ -105,7 +109,9 @@
     --border-strong: #1b3a45;
     --fg: #c7f9ff;            /* text */
     --fg-muted: #6fa3ad;      /* dim */
-    --heading: #00f0ff;       /* cyan */
+    --heading: #c7f9ff;       /* text: cyan means clickable, so headings aren't cyan */
+    --title: #00f0ff;         /* the page title, the one cyan heading */
+    --title-glow: 0 0 18px rgba(0, 240, 255, 0.5);
     --link: #00f0ff;
     --link-hover: #00b8c9;    /* cyan-hover */
     --focus-ring: none;
@@ -125,6 +131,8 @@
     --h3: 600 18px/23px var(--font-heading);
     --heading-case: uppercase;
     --radius: 0;
+    --measure: 68ch;          /* Neon Terminal reading pages */
+    --prose-leading: 26px;
 
     --card-bg: #0b1216;
     --card-border: #1b3a45;
@@ -181,7 +189,9 @@
   --border-strong: #1b3a45;
   --fg: #c7f9ff;
   --fg-muted: #6fa3ad;
-  --heading: #00f0ff;
+  --heading: #c7f9ff;
+  --title: #00f0ff;
+  --title-glow: 0 0 18px rgba(0, 240, 255, 0.5);
   --link: #00f0ff;
   --link-hover: #00b8c9;
   --focus-ring: none;
@@ -201,6 +211,8 @@
   --h3: 600 18px/23px var(--font-heading);
   --heading-case: uppercase;
   --radius: 0;
+  --measure: 68ch;
+  --prose-leading: 26px;
 
   --card-bg: #0b1216;
   --card-border: #1b3a45;
@@ -281,7 +293,7 @@ h1, h2, h3 {
   text-transform: var(--heading-case);
   overflow-wrap: anywhere;
 }
-h1 { font: var(--h1); letter-spacing: var(--h1-tracking); margin: 0 0 32px; }
+h1 { font: var(--h1); letter-spacing: var(--h1-tracking); margin: 0 0 32px; color: var(--title); text-shadow: var(--title-glow); }
 h2 { font: var(--h2); letter-spacing: var(--h2-tracking); margin: 48px 0 16px; }
 h3 { font: var(--h3); margin: 32px 0 12px; }
 
@@ -324,7 +336,7 @@ button:focus-visible {
 }
 .site-name {
   font: 600 18px/24px var(--font-heading);
-  color: var(--heading);
+  color: var(--title);
   text-decoration: none;
   text-transform: var(--heading-case);
 }
@@ -466,6 +478,8 @@ button:focus-visible {
 
 /* ---- Prose (rendered Markdown) ---- */
 .prose img { max-width: 100%; height: auto; }
+/* Reading width and leading for running text; tables and code keep the full column. */
+.prose :is(p, li, blockquote) { max-width: var(--measure); line-height: var(--prose-leading); }
 .prose blockquote {
   padding: 4px 0 4px 16px;
   color: var(--fg-muted);
@@ -483,3 +497,7 @@ button:focus-visible {
 }
 .prose th, .prose td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
 .prose th { font-family: var(--font-label); font-weight: 500; color: var(--fg-muted); }
+
+/* Lowercase names and code keep their case inside uppercase headings (Neon Terminal).
+ * Last in the file so it wins over .site-name and .card__title, which set the case too. */
+.keep-case, h1 code, h2 code, h3 code { text-transform: none; }
