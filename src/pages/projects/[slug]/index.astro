@@ -20,7 +20,7 @@ const links = [
 
 <BaseLayout title={project.data.title} description={project.data.summary} type="article">
   <article>
-    <h1>{project.data.title}</h1>
+    <h1 class:list={{ "keep-case": project.data.keepCase }}>{project.data.title}</h1>
     <div class="article-meta">
       <Status status={project.data.status} />
       <Tags tags={project.data.tags} />

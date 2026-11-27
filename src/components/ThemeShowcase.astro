@@ -1,0 +1,118 @@
+---
+// Every piece of one theme, rendered with that theme's own CSS from its
+// THEME.md. It lives in a declarative shadow root, so the site's light/dark
+// styles don't reach in and the theme's styles don't leak out: Tidewater
+// shows as Tidewater even when the site is in dark mode, and the reverse.
+import { shadowCss, type Pattern, type ThemeInfo, type ThemeSource, type Token } from "../lib/themes";
+import { SHOWCASE_EXTRAS } from "../data/showcase-extras";
+
+interface Props {
+  theme: ThemeInfo;
+  source: ThemeSource;
+}
+
+const { theme, source } = Astro.props;
+
+const esc = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const label = (text: string) => `<span class="label sc-label">${esc(theme.labelPrefix + text)}</span>`;
+
+const byKind = (test: (t: Token) => boolean) => source.tokens.filter(test);
+const isColor = (t: Token) => /^(#|rgba?\(|var\(--)/.test(t.value) && !/^--(font|space|radius|shadow|glow)/.test(t.name);
+const colors = byKind(isColor);
+const fonts = byKind((t) => t.name.startsWith("--font-"));
+const spaces = byKind((t) => t.name.startsWith("--space-"));
+const radii = byKind((t) => t.name.startsWith("--radius-"));
+const depths = byKind((t) => /^--(shadow|glow)-/.test(t.name));
+
+// Colors, in the groups THEME.md's comments give them.
+const colorGroups = [...new Set(colors.map((t) => t.group))].map((group) => ({
+  group,
+  tokens: colors.filter((t) => t.group === group),
+}));
+const swatch = (t: Token) => `<div class="sc-swatch">
+  <div class="sc-chip" style="background: var(${t.name})"></div>
+  <code>${esc(t.name)}</code>
+  <div class="small">${esc(t.value)}${t.note ? ` · ${esc(t.note)}` : ""}</div>
+</div>`;
+
+const colorHtml = colorGroups
+  .map(({ group, tokens }) => `<div class="small sc-group">${esc(group)}</div><div class="sc-grid">${tokens.map(swatch).join("")}</div>`)
+  .join("");
+
+const typeHtml = `<div class="sc-stack" aria-hidden="true">
+  <h1>Page title</h1>
+  <h2>Section heading</h2>
+  <h3>Card or panel title</h3>
+  <p style="margin: 0">Body text, for everything people read. The quick brown fox jumps over the lazy dog.</p>
+  <div class="small">Small text, for helper text and captions.</div>
+  ${label("section label")}
+</div>
+<div class="sc-grid sc-fonts">${fonts
+  .map(
+    (t) => `<div><div style="font: 500 22px/30px var(${t.name})">Aa Bb 0123</div><code>${esc(t.name)}</code><div class="small">${esc(t.value.split(",")[0].replace(/"/g, ""))}</div></div>`,
+  )
+  .join("")}</div>`;
+
+const spaceHtml = `<div class="sc-stack">${spaces
+  .map((t) => `<div class="sc-space"><code>${esc(t.name)}</code><span class="sc-bar" style="width: var(${t.name})"></span><span class="small">${esc(t.value)}</span></div>`)
+  .join("")}</div>`;
+
+const shapeHtml = `<div class="sc-grid">${[
+  ...radii.map((t) => `<div><div class="sc-box" style="border-radius: var(${t.name})"></div><code>${esc(t.name)}</code><div class="small">${esc(t.value)}${t.note ? ` · ${esc(t.note)}` : ""}</div></div>`),
+  ...depths.map((t) => `<div><div class="sc-box" style="box-shadow: var(${t.name})"></div><code>${esc(t.name)}</code><div class="small">${esc(t.note ?? t.value)}</div></div>`),
+].join("")}</div>`;
+
+// Links in the patterns point at pages of an imaginary app; keep them on this page.
+const inert = (html: string) => html.replace(/href="[^"#][^"]*"/g, 'href="#"');
+const pattern = (p: Pattern) => `<div class="sc-pattern"><div class="small sc-group">${esc(p.caption)}</div><div class="sc-demo">${inert(p.html)}</div></div>`;
+const componentHtml = [...source.patterns, ...(SHOWCASE_EXTRAS[theme.id] ?? [])].map(pattern).join("");
+
+const layoutCss = `
+.page { padding: 32px; }
+.sc-section + .sc-section { margin-top: 56px; }
+.sc-label { display: block; margin-bottom: 16px; }
+.sc-group { margin: 24px 0 8px; }
+.sc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 16px; }
+.sc-stack { display: grid; gap: 16px; }
+.sc-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+.sc-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+.sc-swatch code, .sc-fonts code, .sc-space code, .sc-grid code { display: block; margin-top: 8px; font: 500 12px/18px var(--font-mono); }
+.sc-chip { height: 56px; box-shadow: inset 0 0 0 1px rgba(128, 128, 128, 0.35); }
+.sc-space { display: grid; grid-template-columns: 110px auto 1fr; gap: 12px; align-items: center; }
+.sc-space code { margin: 0; }
+.sc-bar { display: block; height: 12px; background: currentColor; opacity: 0.55; }
+.sc-box { height: 64px; background: var(--panel, var(--surface)); box-shadow: inset 0 0 0 1px var(--line, var(--border)); }
+.sc-pattern + .sc-pattern { margin-top: 32px; }
+.sc-demo { overflow-x: auto; padding: 4px; }
+.sc-demo > * + * { margin-top: 12px; }
+@media (max-width: 600px) { .page { padding: 20px; } }
+`;
+
+const css = shadowCss(source) + layoutCss;
+
+const body = `<div class="page">
+  <section class="sc-section">${label("color")}${colorHtml}</section>
+  <section class="sc-section">${label("type")}${typeHtml}</section>
+  <section class="sc-section">${label("space")}${spaceHtml}</section>
+  <section class="sc-section">${label("shape and depth")}${shapeHtml}</section>
+  <section class="sc-section">${label("components")}${componentHtml}</section>
+</div>`;
+---
+
+<div class="showcase" role="region" aria-label={`${theme.name} showcase`}>
+  <template shadowrootmode="open"><style set:html={css} /><Fragment set:html={body} /></template>
+</div>
+
+<style>
+  /* Wider than the reading column, so dashboard components have room. */
+  .showcase {
+    position: relative;
+    left: 50%;
+    width: min(1100px, calc(100vw - 32px));
+    transform: translateX(-50%);
+    margin: 24px 0 32px;
+    border: 1px solid var(--border-strong);
+    overflow: hidden;
+  }
+</style>

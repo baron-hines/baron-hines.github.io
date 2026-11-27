@@ -29,8 +29,23 @@ const projects = defineCollection({
     repo: z.url().optional(),
     links: z.array(z.object({ label: z.string(), href: z.string() })).default([]),
     tags,
+    // The title is a lowercase name (kiosk, oscar-wallpaper): Neon Terminal's
+    // uppercase headings leave it as written.
+    keepCase: z.boolean().default(false),
     draft,
   }),
 });
 
-export const collections = { blog, projects };
+// Each theme's README.md in the themes repo (the `themes` submodule): its
+// design philosophy, rendered on /projects/themes/<id>/. The repo is the
+// source of truth, so these are read from it, never copied.
+const themeDocs = defineCollection({
+  loader: glob({
+    base: "./themes",
+    pattern: "*/README.md",
+    generateId: ({ entry }) => entry.split("/")[0],
+  }),
+  schema: z.object({}),
+});
+
+export const collections = { blog, projects, themeDocs };

@@ -15,7 +15,12 @@ const all = await projects();
     all.length > 0 ? (
       <ul class="cards">
         {all.map((project) => (
-          <Card href={`/projects/${project.id}/`} title={project.data.title} summary={project.data.summary}>
+          <Card
+            href={`/projects/${project.id}/`}
+            title={project.data.title}
+            summary={project.data.summary}
+            keepCase={project.data.keepCase}
+          >
             <Status status={project.data.status} />
             <Tags tags={project.data.tags} />
           </Card>

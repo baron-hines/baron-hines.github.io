@@ -1,6 +1,7 @@
 ---
 title: oscar-wallpaper
 summary: Puts a wallpaper (an image or a color, with optional text) on the TVs in my house, cast for right now and kept in a Google Photos album for the TV's screensaver.
+keepCase: true
 status: done
 links:
   - label: App homepage
