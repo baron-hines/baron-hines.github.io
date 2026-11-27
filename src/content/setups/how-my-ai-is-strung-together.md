@@ -66,7 +66,7 @@ flowchart LR
 
 Then:
 
-1. A webhook reaches a small service on the server, which checks GitHub's signature.
+1. GitHub's webhook comes in through Tailscale Funnel to a small service on the server, which checks GitHub's signature.
 2. The service clones the repo and starts a fresh sandbox container on its own Docker daemon. The agent inside is [OpenHands](https://github.com/All-Hands-AI/OpenHands) or [opencode](https://github.com/sst/opencode). The sandbox has no GitHub credentials and can reach only the gateway and the internet, nothing else on my network. A job gets up to an hour.
 3. If the agent needs a decision, it calls an `ask_owner` tool. The question goes through n8n into a Discord thread, and my reply in that thread goes back to the waiting job.
 4. When it finishes, the service checks the result. It refuses changes to CI workflows or `.env` files, and changes without a summary. Otherwise it pushes a new branch and opens a **draft** PR that closes the issue. It pushes and comments as its own GitHub App, so I can review and approve its PRs like anyone else's.
@@ -79,6 +79,7 @@ Every commit the agent makes ends with a trailer naming the tool and the real mo
 
 - **Media naming.** When a download finishes, a workflow asks `media-classify` for the title, year and season, and a small API moves the file into the right library. Anything it isn't sure about is left for me to check.
 - **Shared memory.** Any agent in n8n can get "remember" and "recall" tools backed by [Chroma](https://www.trychroma.com/). Memories that came from web pages, emails or files are marked untrusted when recalled.
+- **Chroma stays off the network.** It has no login, so only n8n's Docker network and scripts on the server itself can reach it.
 - **Infrastructure search.** A service re-indexes my infrastructure repos (docs, configs and scripts, never secrets) into Chroma within about a minute of a change. A "network lookup" tool answers questions with excerpts that name the repo and file they came from.
 - **The coding agent's messages,** as above.
 
@@ -90,6 +91,7 @@ On the GPU PC there's a second setup. A `cloud-code` command runs Claude Code ag
 
 ## Around it
 
+- **Tailscale.** It's how I reach the server from my phone and laptop: SSH, and the n8n editor over HTTPS, with neither open to the internet. Tailscale Funnel publishes only the webhook paths that must be public (n8n's production webhooks, and GitHub's webhooks for the coding agent and repo syncing). The editor stays on a tailnet-only port. The tailnet policy lives in its own repo, and CI tests it on every PR and applies it on merge, signing in with GitHub's OIDC identity instead of a stored secret.
 - **CI.** A self-hosted Forgejo mirrors the GitHub repos and runs their checks. A merge to the server's repo deploys only if every check passed. Deploys run one at a time, and results show on the GitHub PR.
 - **Discord.** A small bot keeps one outbound connection to Discord, so nothing is exposed to the internet. It starts a thread per job or topic, and its mentions can only ever reach me.
 - **Dashboards.** Grafana shows requests per model, spend per day, each key's budget, and how many agent jobs are running or waiting on me.
