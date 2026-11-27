@@ -66,6 +66,7 @@
   --status-dot: "\25CF\00a0"; /* a dot before the word: status is never color alone */
   --status-open: "";
   --status-close: "";
+  --status-case: none;
 
   /* Code (Shiki's css-variables theme; colors as in oscar's Forgejo Tidewater theme) */
   --code-bg: #eff6f8;
@@ -149,6 +150,7 @@
     --status-dot: "";
     --status-open: "[";
     --status-close: "]";
+    --status-case: uppercase;
 
     --code-bg: #0b1216;
     --code-border: #1b3a45;
@@ -224,6 +226,7 @@
   --status-dot: "";
   --status-open: "[";
   --status-close: "]";
+  --status-case: uppercase;
 
   --code-bg: #0b1216;
   --code-border: #1b3a45;
@@ -435,7 +438,7 @@ button:focus-visible {
 :root[data-theme="dark"] .tag { padding: 0; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tag { padding: 0; } }
 
-.status { font: 500 13px/20px var(--font-label); text-transform: uppercase; letter-spacing: 0.04em; }
+.status { font: 500 13px/20px var(--font-label); text-transform: var(--status-case); letter-spacing: 0.04em; }
 .status::before { content: var(--status-dot) var(--status-open); }
 .status::after { content: var(--status-close); }
 .status--active { color: var(--status-active); }

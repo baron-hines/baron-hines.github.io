@@ -82,7 +82,7 @@ Proposed 2026-11-26, for the owner's review.
 
 - [x] Each section's index and detail page builds, with drafts hidden in production.
 - [x] Code blocks and Mermaid diagrams switch colors with the toggle.
-- [x] `/rss.xml` and `/sitemap.xml` are served, and every page has Open Graph title and description tags. (How a link unfurls in Discord gets checked when the first real post is shared, in Phase 3.)
+- [x] `/rss.xml` and `/sitemap.xml` are served, and every page has Open Graph title and description tags. (How a link unfurls in Discord gets checked when a page is first shared there.)
 - [x] No horizontal scroll at 375 px. Text passes 4.5:1 contrast in both modes.
 
 *Done 2026-11-26.* Two things the plan didn't expect: Mermaid uses a `.label` class internally, so the section-label style is named `.section-label`; and the dev server reports paths without the trailing slash, so the layout normalizes the path before marking the current nav link.
@@ -98,9 +98,10 @@ Proposed 2026-11-26, for the owner's review.
    - **Blog:** one first post. The default is "Theming this site", on the Tidewater/Neon Terminal pairing from [#1](https://github.com/baron-hines/baron-hines.github.io/pull/1), because it's already done and needs no new research.
 3. **(owner)** Review and approve. The agent merges once approved and green.
 
-- [ ] The owner picked the projects.
-- [ ] The setup page passes D7's check and the owner's review.
-- [ ] The first post is live and in the RSS feed.
+- [x] The owner picked the projects: **AI coding stack** (one entry for LiteLLM, n8n, the models and the coding agent; the owner merges this one), and **themes** and **kiosk** as placeholders with no source links, since both repos stay private for now. The Ruby and Roundhouse repos are left out for now.
+- [ ] The Local AI stack page passes D7's check and the owner's review, and is live.
+
+*Changed 2026-11-26 (owner):* no setup page and no first post for now. The "How my AI is strung together" draft is folded into the AI coding stack project page, which is renamed **Local AI stack** (`/projects/local-ai-stack/`), and the "Theming this site" post is dropped. Blog and Setups show their empty states until there's something to put in them.
 
 ## Open questions
 
@@ -126,4 +127,4 @@ Proposed 2026-11-26, for the owner's review.
 
 - [x] Phase 1: Astro in place, Pages deploys from Actions, existing URLs unchanged
 - [x] Phase 2: sections, components and extras merged; checked in both modes and at phone width
-- [ ] **(owner)** Phase 3: projects picked; first setup page and first post approved and live
+- [ ] **(owner)** Phase 3: projects picked; Local AI stack page approved and live
