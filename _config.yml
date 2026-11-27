@@ -1,0 +1,3 @@
+# Keep the plans folder off the published site while Pages still builds with Jekyll.
+exclude:
+  - plans
