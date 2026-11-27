@@ -1,0 +1,27 @@
+---
+import { render } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Mermaid from "../../../components/Mermaid.astro";
+import Tags from "../../../components/Tags.astro";
+import { formatDate, hasMermaid, setups } from "../../../lib/content";
+
+export async function getStaticPaths() {
+  return (await setups()).map((setup) => ({ params: { slug: setup.id }, props: { setup } }));
+}
+
+const { setup } = Astro.props;
+const { Content } = await render(setup);
+---
+
+<BaseLayout title={setup.data.title} description={setup.data.summary} type="article">
+  <article>
+    <h1>{setup.data.title}</h1>
+    <div class="article-meta">
+      <span>Updated <time datetime={setup.data.updated.toISOString()}>{formatDate(setup.data.updated)}</time></span>
+      <Tags tags={setup.data.tags} />
+    </div>
+    <div class="prose"><Content /></div>
+  </article>
+  <p><a href="/setups/">All setups</a></p>
+  {hasMermaid(setup.body) && <Mermaid />}
+</BaseLayout>

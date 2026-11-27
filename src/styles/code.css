@@ -1,0 +1,45 @@
+/*
+ * Code blocks and Mermaid diagrams. Colors come from the --astro-code-* and
+ * --diagram-* tokens in theme.css, so both switch with the light/dark toggle
+ * (plans/in-progress/site-plan.md, D6a and D6b).
+ */
+
+:not(pre) > code {
+  padding: 1px 6px;
+  font: 0.9em/1 var(--font-code);
+  color: var(--fg);
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: var(--radius);
+}
+
+pre.astro-code {
+  padding: 16px 20px;
+  overflow-x: auto;
+  font: 14px/22px var(--font-code);
+  background: var(--code-bg) !important;
+  border: 1px solid var(--code-border);
+  border-radius: var(--radius);
+}
+pre.astro-code code { font: inherit; }
+
+/* Mermaid source, before (or without) JavaScript: shown as a plain code block. */
+pre:has(> code.language-mermaid) {
+  padding: 16px 20px;
+  overflow-x: auto;
+  font: 14px/22px var(--font-code);
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: var(--radius);
+}
+
+.diagram {
+  margin: 0 0 16px;
+  padding: 16px;
+  overflow-x: auto;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+}
+.diagram svg { max-width: 100%; height: auto; }

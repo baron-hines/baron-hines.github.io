@@ -10,7 +10,9 @@
     "privacy-check": "node scripts/privacy-check.mjs dist"
   },
   "dependencies": {
-    "astro": "7.4.13"
+    "@astrojs/rss": "4.0.19",
+    "astro": "7.4.13",
+    "mermaid": "12.3.0"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",

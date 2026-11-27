@@ -39,12 +39,12 @@ Proposed 2026-11-26, for the owner's review.
 
 | # | Date | Decision | Why |
 |---|---|---|---|
-| D1 | 2026-11-26 | Build with **Astro** (7.x, pinned in `package-lock.json`), static output only. | It turns Markdown into pages and ships no JavaScript unless a page asks for some. **Content collections** give each section a schema for its front matter (title, date, tags, status), so a typo'd date or a missing title fails the build instead of producing a broken page. RSS and sitemap are first-party add-ons. If a setup page later wants something interactive, a component can do that without changing tools. Eleventy would also work but has no schemas. Hugo's templates are harder to change. Jekyll is pinned to old versions on Pages. |
+| D1 | 2026-11-26 | Build with **Astro** (7.x, pinned in `package-lock.json`), static output only. | It turns Markdown into pages and ships no JavaScript unless a page asks for some. **Content collections** give each section a schema for its front matter (title, date, tags, status), so a typo'd date or a missing title fails the build instead of producing a broken page. RSS is a first-party add-on. If a setup page later wants something interactive, a component can do that without changing tools. Eleventy would also work but has no schemas. Hugo's templates are harder to change. Jekyll is pinned to old versions on Pages. |
 | D2 | 2026-11-26 | **URLs:** `/blog/<slug>/`, `/setups/<slug>/`, `/projects/<slug>/`, each with an index page. `build.format: 'preserve'`, so `oscar-wallpaper/index.astro` builds `/oscar-wallpaper/index.html` and `privacy.astro` builds `privacy.html`. | `https://baron-hines.github.io/oscar-wallpaper/` and `.../privacy.html` are the homepage and privacy-policy URLs on oscar-wallpaper's Google OAuth consent screen (oscar's wallpaper plan). If they move, the published app goes out of compliance. `'preserve'` maps source files to output files one-to-one, so those two can't drift. |
 | D3 | 2026-11-26 | **Sections:** a *post* has `title`, `date`, `summary`, `tags`, `draft`. A *setup* has `title`, `summary`, `updated` and no date in the URL, because it's a living page that gets edited. A *project* has `title`, `summary`, `status` (active, paused, done), `repo` (optional, public repos only), `links`, `tags`. The home page shows the latest three posts, every setup, and active projects. | Posts are dated and read once. Setups are reference pages that change. Projects are a portfolio. Giving each its own shape keeps the index pages simple and lets the home page pick from each. |
 | D4 | 2026-11-26 | **Theme:** `theme.css` and `theme.js` move to `src/styles/` and `public/`, unchanged at first. One `BaseLayout` holds `<head>`, the header and the footer. The light/dark toggle moves into the header nav. New pieces follow the design docs: Tidewater uses `radius-card`, `shadow-raised` and pill tags (`cyan-100` with `cyan-900` text). Neon Terminal uses square `panel` cards with a `line` border, `glow-panel` and bracketed tags (`[active]`), with section labels written as `// projects`. | Each design system says how cards, tags and labels look, so the components follow those rules. Nothing new is invented. The tokens already switch on `data-theme`, so a component only references tokens and works in both modes. |
 | D5 | 2026-11-26 | **Wording** stays plain sentence case in the Markdown. Neon Terminal's uppercase headings, bracketed status words and `//` labels come from CSS (`text-transform`, `::before`) and the components, not from the text. | Tidewater wants sentence case and Neon Terminal wants shell-style text. The same Markdown has to read right in both, so the dark mode's styling is applied on top. |
-| D6 | 2026-11-26 | **Extras, all with zero runtime cost:** (a) code highlighting with Shiki's two-theme output, colored from the same tokens as the Forgejo theme files in oscar (`docker/forgejo/themes/`); (b) Mermaid diagrams in Markdown, rendered in the browser and **loaded only on pages that have one**, redrawn with the token colors when the theme toggles; (c) an RSS feed for the blog; (d) a sitemap; (e) Open Graph tags so links unfurl with a title and summary in Discord and elsewhere; (f) a themed 404 page; (g) CSS-only page transitions (`@view-transition { navigation: auto; }`), which browsers without support simply skip. | These make the site feel finished without adding things to maintain. Mermaid matters because the setup pages will want the same kind of diagrams oscar's plans already use. It's loaded only where it's used because it's large (around 700 kB). Search, comments and tag pages are left for later (Future work) until there's enough content to need them. |
+| D6 | 2026-11-26 | **Extras, all with zero runtime cost:** (a) code highlighting with Shiki's two-theme output, colored from the same tokens as the Forgejo theme files in oscar (`docker/forgejo/themes/`); (b) Mermaid diagrams in Markdown, rendered in the browser and **loaded only on pages that have one**, redrawn with the token colors when the theme toggles; (c) an RSS feed for the blog; (d) a sitemap at `/sitemap.xml`, written as a small endpoint (`@astrojs/sitemap` guessed URLs from route names and listed `/oscar-wallpaper/privacy` instead of `privacy.html`); (e) Open Graph tags so links unfurl with a title and summary in Discord and elsewhere; (f) a themed 404 page; (g) CSS-only page transitions (`@view-transition { navigation: auto; }`), which browsers without support simply skip. | These make the site feel finished without adding things to maintain. Mermaid matters because the setup pages will want the same kind of diagrams oscar's plans already use. It's loaded only where it's used because it's large (around 700 kB). Search, comments and tag pages are left for later (Future work) until there's enough content to need them. |
 | D7 | 2026-11-26 | **Privacy rule for setup pages:** describe the architecture (which tools, how they connect, why) but never private IPs, LAN hostnames and ports, usernames, email addresses, account or App IDs, key paths, or token names. A CI step fails the build if the output contains a private IPv4 address (`10.`, `172.16–31.`, `192.168.`), an email address, or a token prefix (`ghp_`, `github_pat_`, `sk-`). | oscar's docs are full of these details, and drafting setup pages from them is how they'd leak. The site is public and gets cached. A grep in CI catches the slips a review might miss. |
 | D8 | 2026-11-26 | **Deploy:** one workflow, `.github/workflows/deploy.yml`. Pull requests run `astro check`, the build and D7's check. Pushes to `main` also deploy through `actions/upload-pages-artifact` and `actions/deploy-pages`. The Pages source changes from `legacy` to `workflow` (`gh api -X PUT repos/baron-hines/baron-hines.github.io/pages -f build_type=workflow`) in the same step as the first deploy. Node is pinned to the current LTS in `.nvmrc`. | PRs get a real check before they publish anything. Today's `legacy` build runs Jekyll on whatever is pushed, which would publish Astro's source files instead of the built site. |
 | D9 | 2026-11-26 | **Drafts:** `draft: true` keeps a post out of production builds but shows it in `npm run dev`. | The owner, or an agent, can push an unfinished post on its branch without publishing it. |
@@ -66,9 +66,11 @@ Proposed 2026-11-26, for the owner's review.
 2. Once green, the agent switches the Pages source to `workflow`, merges, and watches the first deploy.
 3. If the deploy fails, the agent reverts the merge on `main` and switches the source back to `legacy`. Both are needed: `legacy` builds whatever `main` holds, so on its own it would publish Astro's source files. The fix then goes in a new PR.
 
-- [ ] PR checks run `astro check`, build and the privacy grep.
-- [ ] The Pages source is `workflow` and the first deploy succeeded.
-- [ ] `/`, `/oscar-wallpaper/` and `/oscar-wallpaper/privacy.html` return 200 and look as they do today in both modes.
+- [x] PR checks run `astro check`, build and the privacy grep.
+- [x] The Pages source is `workflow` and the first deploy succeeded.
+- [x] `/`, `/oscar-wallpaper/` and `/oscar-wallpaper/privacy.html` return 200 and look as they do today in both modes.
+
+*Done 2026-11-26* in [#3](https://github.com/baron-hines/baron-hines.github.io/pull/3). The privacy check was tested against a planted file with a `192.168.x.x` address, an email address and a `ghp_` token, and caught all three.
 
 ### Phase 2: sections, components and extras
 
@@ -78,10 +80,12 @@ Proposed 2026-11-26, for the owner's review.
 2. The PR includes screenshots of the home page, a project card and a post with code and a Mermaid diagram, in both modes and at phone width (375 px).
 3. The agent merges it once green.
 
-- [ ] Each section's index and detail page builds, with drafts hidden in production.
-- [ ] Code blocks and Mermaid diagrams switch colors with the toggle.
-- [ ] `/rss.xml` and `/sitemap-index.xml` are served. A link pasted into Discord unfurls with the title and summary.
-- [ ] No horizontal scroll at 375 px. Text passes 4.5:1 contrast in both modes.
+- [x] Each section's index and detail page builds, with drafts hidden in production.
+- [x] Code blocks and Mermaid diagrams switch colors with the toggle.
+- [x] `/rss.xml` and `/sitemap.xml` are served, and every page has Open Graph title and description tags. (How a link unfurls in Discord gets checked when the first real post is shared, in Phase 3.)
+- [x] No horizontal scroll at 375 px. Text passes 4.5:1 contrast in both modes.
+
+*Done 2026-11-26.* Two things the plan didn't expect: Mermaid uses a `.label` class internally, so the section-label style is named `.section-label`; and the dev server reports paths without the trailing slash, so the layout normalizes the path before marking the current nav link.
 
 ### Phase 3: what we already have
 
@@ -120,6 +124,6 @@ Proposed 2026-11-26, for the owner's review.
 
 ## Progress
 
-- [ ] Phase 1: Astro in place, Pages deploys from Actions, existing URLs unchanged
-- [ ] Phase 2: sections, components and extras merged; checked in both modes and at phone width
+- [x] Phase 1: Astro in place, Pages deploys from Actions, existing URLs unchanged
+- [x] Phase 2: sections, components and extras merged; checked in both modes and at phone width
 - [ ] **(owner)** Phase 3: projects picked; first setup page and first post approved and live

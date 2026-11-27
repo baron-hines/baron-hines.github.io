@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Card from "../../components/Card.astro";
+import Status from "../../components/Status.astro";
+import Tags from "../../components/Tags.astro";
+import { projects } from "../../lib/content";
+
+const all = await projects();
+---
+
+<BaseLayout title="Projects" description="Things I've built or am building.">
+  <h1>Projects</h1>
+  <p class="muted">Things I've built or am building.</p>
+  {
+    all.length > 0 ? (
+      <ul class="cards">
+        {all.map((project) => (
+          <Card href={`/projects/${project.id}/`} title={project.data.title} summary={project.data.summary}>
+            <Status status={project.data.status} />
+            <Tags tags={project.data.tags} />
+          </Card>
+        ))}
+      </ul>
+    ) : (
+      <p class="empty">No projects listed yet.</p>
+    )
+  }
+</BaseLayout>

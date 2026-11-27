@@ -1,0 +1,27 @@
+---
+import { render } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Mermaid from "../../../components/Mermaid.astro";
+import Tags from "../../../components/Tags.astro";
+import { formatDate, hasMermaid, posts } from "../../../lib/content";
+
+export async function getStaticPaths() {
+  return (await posts()).map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BaseLayout title={post.data.title} description={post.data.summary} type="article">
+  <article>
+    <h1>{post.data.title}</h1>
+    <div class="article-meta">
+      <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+      <Tags tags={post.data.tags} />
+    </div>
+    <div class="prose"><Content /></div>
+  </article>
+  <p><a href="/blog/">All posts</a></p>
+  {hasMermaid(post.body) && <Mermaid />}
+</BaseLayout>

@@ -1,0 +1,17 @@
+---
+// One entry in a list: a post, setup or project. The whole card is clickable.
+interface Props {
+  href: string;
+  title: string;
+  summary: string;
+}
+
+const { href, title, summary } = Astro.props;
+const hasMeta = Astro.slots.has("default");
+---
+
+<li class="card">
+  <h3 class="card__title"><a href={href}>{title}</a></h3>
+  <p class="card__summary">{summary}</p>
+  {hasMeta && <div class="card__meta"><slot /></div>}
+</li>

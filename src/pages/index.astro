@@ -1,8 +1,65 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Card from "../components/Card.astro";
+import Status from "../components/Status.astro";
+import { formatDate, posts, projects, setups } from "../lib/content";
+
+const latest = (await posts()).slice(0, 3);
+const allSetups = await setups();
+const active = (await projects()).filter((p) => p.data.status === "active");
 ---
 
 <BaseLayout title="baron-hines">
   <h1>baron-hines</h1>
-  <ul><li><a href="oscar-wallpaper/">oscar-wallpaper</a></li></ul>
+  <p class="muted">Notes on what I'm building, how my machines and AI tools fit together, and the projects behind them.</p>
+
+  <h2 class="section-label">Latest posts</h2>
+  {
+    latest.length > 0 ? (
+      <ul class="cards">
+        {latest.map((post) => (
+          <Card href={`/blog/${post.id}/`} title={post.data.title} summary={post.data.summary}>
+            <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+          </Card>
+        ))}
+      </ul>
+    ) : (
+      <p class="empty">No posts yet.</p>
+    )
+  }
+  {latest.length > 0 && <p><a href="/blog/">All posts</a></p>}
+
+  <h2 class="section-label">Setups</h2>
+  {
+    allSetups.length > 0 ? (
+      <ul class="cards">
+        {allSetups.map((setup) => (
+          <Card href={`/setups/${setup.id}/`} title={setup.data.title} summary={setup.data.summary} />
+        ))}
+      </ul>
+    ) : (
+      <p class="empty">No setups written up yet.</p>
+    )
+  }
+
+  <h2 class="section-label">Active projects</h2>
+  {
+    active.length > 0 ? (
+      <ul class="cards">
+        {active.map((project) => (
+          <Card href={`/projects/${project.id}/`} title={project.data.title} summary={project.data.summary}>
+            <Status status={project.data.status} />
+          </Card>
+        ))}
+      </ul>
+    ) : (
+      <p class="empty">No projects listed yet.</p>
+    )
+  }
+  <p><a href="/projects/">All projects</a></p>
+
+  <h2 class="section-label">Also here</h2>
+  <ul>
+    <li><a href="/oscar-wallpaper/">oscar-wallpaper</a></li>
+  </ul>
 </BaseLayout>
