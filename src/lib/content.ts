@@ -1,6 +1,6 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 
-type Section = "blog" | "setups" | "projects";
+type Section = "blog" | "projects";
 
 /** Entries for a section, without drafts in production builds (site-plan D9). */
 export async function published<S extends Section>(section: S): Promise<CollectionEntry<S>[]> {
@@ -10,10 +10,6 @@ export async function published<S extends Section>(section: S): Promise<Collecti
 
 export async function posts() {
   return (await published("blog")).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-}
-
-export async function setups() {
-  return (await published("setups")).sort((a, b) => a.data.title.localeCompare(b.data.title));
 }
 
 const STATUS_ORDER = { active: 0, paused: 1, done: 2 } as const;

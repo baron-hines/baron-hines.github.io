@@ -6,12 +6,14 @@ interface Props {
   title: string;
   /** Used for the meta description and link previews (site-plan D6e). */
   description?: string;
-  /** "article" for posts, setups and projects; "website" otherwise. */
+  /** "article" for posts and projects; "website" otherwise. */
   type?: "website" | "article";
+  /** Nav section to mark as current when the URL doesn't say, e.g. "/projects/". */
+  section?: string;
 }
 
 const SITE = "baron-hines";
-const { title, description = "Notes, setups and projects.", type = "website" } = Astro.props;
+const { title, description = "Notes and projects.", type = "website", section } = Astro.props;
 const fullTitle = title === SITE ? SITE : `${title} · ${SITE}`;
 const url = new URL(Astro.url.pathname, Astro.site);
 // The dev server and the build report "/projects" and "/projects/" differently,
@@ -20,7 +22,6 @@ const path = Astro.url.pathname.replace(/index\.html$/, "").replace(/\/?$/, "/")
 
 const nav = [
   { href: "/blog/", label: "Blog" },
-  { href: "/setups/", label: "Setups" },
   { href: "/projects/", label: "Projects" },
 ];
 ---
@@ -62,7 +63,10 @@ const nav = [
             {
               nav.map((item) => (
                 <li>
-                  <a href={item.href} aria-current={path.startsWith(item.href) ? "page" : undefined}>
+                  <a
+                    href={item.href}
+                    aria-current={path === item.href ? "page" : path.startsWith(item.href) || section === item.href ? "true" : undefined}
+                  >
                     {item.label}
                   </a>
                 </li>
