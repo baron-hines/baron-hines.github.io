@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Card from "../../components/Card.astro";
+import SideRail from "../../components/SideRail.astro";
 import Status from "../../components/Status.astro";
 import Tags from "../../components/Tags.astro";
 import { projects } from "../../lib/content";
@@ -8,26 +9,33 @@ import { projects } from "../../lib/content";
 const all = await projects();
 ---
 
-<BaseLayout title="Projects" description="Things I've built or am building.">
+<BaseLayout title="Projects" description="Things I've built or am building." wide>
   <h1>Projects</h1>
   <p class="muted">Things I've built or am building.</p>
-  {
-    all.length > 0 ? (
-      <ul class="cards">
-        {all.map((project) => (
-          <Card
-            href={`/projects/${project.id}/`}
-            title={project.data.title}
-            summary={project.data.summary}
-            keepCase={project.data.keepCase}
-          >
-            <Status status={project.data.status} />
-            <Tags tags={project.data.tags} />
-          </Card>
-        ))}
-      </ul>
-    ) : (
-      <p class="empty">No projects listed yet.</p>
-    )
-  }
+
+  <div class="home">
+    <div class="home__main">
+      {
+        all.length > 0 ? (
+          <ul class="cards">
+            {all.map((project) => (
+              <Card
+                href={`/projects/${project.id}/`}
+                title={project.data.title}
+                summary={project.data.summary}
+                keepCase={project.data.keepCase}
+              >
+                <Status status={project.data.status} />
+                <Tags tags={project.data.tags} />
+              </Card>
+            ))}
+          </ul>
+        ) : (
+          <p class="empty">No projects listed yet.</p>
+        )
+      }
+    </div>
+
+    <SideRail exclude="projects" />
+  </div>
 </BaseLayout>

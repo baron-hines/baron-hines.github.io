@@ -1,0 +1,76 @@
+---
+// The side rail on the list pages. It keeps the same shape everywhere: a
+// heading, a short stack of link cards, and a link on to the full section.
+//
+// Each page passes the section it already shows, and the rail shows the other
+// one, so it never repeats what is beside it.
+//   <SideRail exclude="blog" />      -> active projects (the page shows posts)
+//   <SideRail exclude="projects" />  -> latest posts (the page shows projects)
+import Status from "./Status.astro";
+import { formatDate, posts, projects } from "../lib/content";
+
+interface Props {
+  /** The section the page already shows, so the rail shows the other one. */
+  exclude: "projects" | "blog";
+}
+
+const { exclude } = Astro.props;
+
+// Active projects first; if none are active, the most recently finished ones,
+// so the rail never disappears and the layout never collapses.
+const allProjects = await projects();
+const active = allProjects.filter((p) => p.data.status === "active");
+const projectItems = active.length > 0 ? active : allProjects.filter((p) => p.data.status !== "active");
+const projectHeading = active.length > 0 ? "Projects" : "Recently finished";
+
+const latestPosts = (await posts()).slice(0, 3);
+---
+
+<aside class="rail">
+  {
+    exclude === "blog" ? (
+      projectItems.length > 0 && (
+        <>
+          <h2 class="section-label">{projectHeading}</h2>
+          <ul class="rail__list">
+            {projectItems.map((project) => (
+              <li class="rail__item">
+                <h3 class:list={["rail__title", { "keep-case": project.data.keepCase }]}>
+                  <a href={`/projects/${project.id}/`}>{project.data.title}</a>
+                </h3>
+                <p class="rail__summary">{project.data.summary}</p>
+                <Status status={project.data.status} />
+              </li>
+            ))}
+          </ul>
+          <p class="rail__more"><a href="/projects/">All projects</a></p>
+        </>
+      )
+    ) : latestPosts.length > 0 ? (
+      <>
+        <h2 class="section-label">Latest posts</h2>
+        <ul class="rail__list">
+          {latestPosts.map((post) => (
+            <li class="rail__item">
+              <h3 class="rail__title">
+                <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+              </h3>
+              <p class="rail__summary">{post.data.summary}</p>
+              <time class="rail__date" datetime={post.data.date.toISOString()}>
+                {formatDate(post.data.date)}
+              </time>
+            </li>
+          ))}
+        </ul>
+        <p class="rail__more"><a href="/blog/">All posts</a></p>
+      </>
+    ) : (
+      <>
+        <h2 class="section-label">Blog</h2>
+        <p class="rail__note">
+          Posts are coming. <a href="/rss.xml">Follow by RSS</a>.
+        </p>
+      </>
+    )
+  }
+</aside>

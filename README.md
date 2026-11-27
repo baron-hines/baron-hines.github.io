@@ -8,6 +8,7 @@ The source of https://baron-hines.github.io/: a blog and a list of projects, bui
 - [How a change goes live](#how-a-change-goes-live)
 - [Blog posts](#blog-posts)
 - [Projects](#projects)
+- [The side rail](#the-side-rail)
 - [Themes](#themes)
 - [Other pages](#other-pages)
 - [The site's own look](#the-sites-own-look)
@@ -23,6 +24,16 @@ git clone --recurse-submodules https://github.com/baron-hines/baron-hines.github
 ```
 
 In a clone made without it, run `git submodule update --init` once. Without the submodule the build stops with "The themes repo has no neon-terminal/README.md".
+
+A **worktree** — `git worktree add`, or a `.claude/worktrees/` checkout — is a fresh working tree, so it starts with `themes/` empty and git submodule commands it runs are confined to it. You may also find `npm ci` has not been run there and the usual tools are missing. Before you can build or see a page in a worktree:
+
+```powershell
+git submodule update --init themes
+npm ci
+npm run dev
+```
+
+A worktree is fine for editing and for `npm run check`. It is **not** enough to prove a change works: `check` type-checks templates, but it cannot tell you a page rendered the wrong thing. Do not merge a UI change on `check` alone — build and look at the page first (`npm run build && npm run preview`, or `npm run dev`), in light and dark and at a narrow width.
 
 Node comes from `.nvmrc` (the current LTS). Then:
 
@@ -78,7 +89,6 @@ The post, in Markdown.
 A missing or misspelled field fails the build. The schema is in [`src/content.config.ts`](src/content.config.ts).
 
 The home page shows the three newest posts. The post is also added to `/blog/`, `/rss.xml` and `/sitemap.xml` on its own.
-
 ### Updating a post
 
 Edit the file. To change the URL, rename the file. The old URL then returns 404, so only do it before anyone has linked to it.
@@ -141,6 +151,23 @@ git grep -n "projects/my-tool/"
 ### Projects with extra pages
 
 A project can have its own pages under its URL, as Themes does. Put them in `src/pages/projects/<project>/…`, and add their URLs to the sitemap (see [Other pages](#other-pages)).
+
+## The side rail
+
+Three pages — the home page, `/blog/` and `/projects/` — are laid out as two columns: the list on the left and a **side rail** on the right ([`src/components/SideRail.astro`](src/components/SideRail.astro)).
+
+Each of them passes `exclude`, naming the section it already shows, and the rail renders the *other* one so it never repeats what is beside it:
+
+| Page | The rail shows |
+|---|---|
+| `/` and `/blog/` | Active projects, or the most recently finished ones if none are active |
+| `/projects/` | The three newest posts |
+
+Articles and the other pages keep the narrower reading width; the layout uses `.container--wide` on `BaseLayout` (`wide` prop). Below 60rem the rail drops under the list and its cards go two-up; below 34rem they stack.
+
+The rail is a list of cards, so it does not need a page of its own to be useful — it is the same `projects()` and `posts()` helpers from [`src/lib/content.ts`](src/lib/content.ts) that the index pages use, filtered.
+
+`exclude` names the section the page **already shows**, and the rail renders the other one. That is deliberate: naming the opposite makes a page physically unable to ask the rail for the list it is already showing, so the same content cannot appear twice. (It was written the other way round at first and `/projects/` listed its own projects in the rail. `astro check` passed. Build the page and look at it.)
 
 ## Themes
 
@@ -218,7 +245,7 @@ These values are copied from the themes repo, not read from it. When a theme's t
 | `src/content.config.ts` | The fields each one allows |
 | `src/pages/` | Pages and routes: home, blog, projects, theme pages, oscar-wallpaper, 404, RSS, sitemap |
 | `src/layouts/BaseLayout.astro` | The page frame: head tags, header nav, footer |
-| `src/components/` | Cards, tags, status, Mermaid, the theme showcase |
+| `src/components/` | Cards, tags, status, Mermaid, the side rail, the theme showcase |
 | `src/lib/` | Content helpers, and the themes repo reader |
 | `src/styles/` | The site's tokens and styles, and code block styles |
 | `themes/` | The themes repo (submodule) |

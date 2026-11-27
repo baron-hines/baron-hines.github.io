@@ -288,6 +288,11 @@ body {
 /* main.container, not main: .container's padding would otherwise win. */
 main.container { flex: 1; padding-top: 48px; padding-bottom: 64px; }
 
+/* Home page only: a wider shell so the projects rail fits beside the posts.
+ * Articles and the index pages keep .container's reading width. */
+.container--wide { max-width: 66rem; }
+main.container--wide { padding-top: 48px; padding-bottom: 64px; }
+
 h1, h2, h3 {
   color: var(--heading);
   text-transform: var(--heading-case);
@@ -456,6 +461,61 @@ button:focus-visible {
 .status--active { color: var(--status-active); }
 .status--paused { color: var(--status-paused); }
 .status--done { color: var(--status-done); }
+
+/* ---- Side rail (list pages) ---- */
+/* Posts in the main column, projects in a rail to their right (and the reverse
+ * on /projects/). Below 60rem there is no room for two columns, so the rail
+ * drops under the list and the cards go two-up to keep it from running long. */
+.home {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 17rem;
+  gap: 48px;
+  align-items: start;
+  margin-top: 8px;
+}
+/* The rail's own section label sets its top margin; the list's label must line
+ * up with it, so both lose the extra space the first-child rule would keep. */
+.home__main > .section-label,
+.rail > .section-label { margin-top: 0; }
+
+.rail__list { margin: 0; padding: 0; list-style: none; }
+.rail__item {
+  /* The whole card is the tap target (the title link's ::after covers it), so
+   * a minimum here satisfies WCAG 2.5.8 without touching the link itself. */
+  min-height: 24px;
+  padding: 12px 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  transition: border-color 120ms, box-shadow 120ms;
+}
+.rail__item + .rail__item { margin-top: 12px; }
+.rail__item:hover { border-color: var(--card-border-hover); box-shadow: var(--card-shadow-hover); }
+.rail__item:focus-within { border-color: var(--card-border-hover); }
+.rail__title {
+  position: relative;
+  margin: 0 0 4px;
+  font: var(--h3);
+  text-transform: var(--heading-case);
+}
+.rail__title a { color: var(--heading); text-decoration: none; }
+/* The whole card is clickable through the title link's ::after. */
+.rail__title a::after { content: ""; position: absolute; inset: 0; }
+.rail__title a:focus-visible { outline: none; box-shadow: none; }
+.rail__summary { margin: 0 0 8px; font-size: 14px; line-height: 21px; color: var(--fg-muted); }
+.rail__date { font: 500 13px/20px var(--font-label); color: var(--fg-muted); }
+.rail__more { margin: 16px 0 0; font-size: 14px; }
+.rail__note { margin: 0; font-size: 14px; line-height: 21px; color: var(--fg-muted); }
+
+@media (max-width: 60rem) {
+  .home { grid-template-columns: 1fr; gap: 40px; }
+  .rail__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .rail__item + .rail__item { margin-top: 0; }
+}
+@media (max-width: 34rem) {
+  .rail__list { grid-template-columns: 1fr; }
+}
 
 /* ---- Empty state ---- */
 .empty {
