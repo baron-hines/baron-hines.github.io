@@ -29,6 +29,9 @@
         securityLevel: "strict",
         theme: "base",
         fontFamily: font,
+        // Smaller axis labels, so long model names don't run together in the
+        // wider monospace font of the dark theme.
+        xyChart: { xAxis: { labelFontSize: 11 }, yAxis: { labelFontSize: 11 } },
         themeVariables: {
           fontFamily: font,
           fontSize: "14px",
@@ -41,6 +44,20 @@
           lineColor: token("--diagram-line"),
           textColor: token("--fg"),
           edgeLabelBackground: token("--surface"),
+          // Bar and line charts (xychart-beta), e.g. the kiosk results.
+          xyChart: {
+            backgroundColor: token("--surface"),
+            titleColor: token("--fg"),
+            xAxisLabelColor: token("--fg-muted"),
+            xAxisTitleColor: token("--fg-muted"),
+            xAxisTickColor: token("--border-strong"),
+            xAxisLineColor: token("--border-strong"),
+            yAxisLabelColor: token("--fg-muted"),
+            yAxisTitleColor: token("--fg-muted"),
+            yAxisTickColor: token("--border-strong"),
+            yAxisLineColor: token("--border-strong"),
+            plotColorPalette: token("--diagram-line"),
+          },
           clusterBkg: token("--surface-subtle"),
           clusterBorder: token("--border"),
         },

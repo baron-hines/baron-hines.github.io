@@ -105,6 +105,10 @@ Proposed 2026-11-26, for the owner's review.
 
 *Done 2026-11-27* in [#5](https://github.com/baron-hines/baron-hines.github.io/pull/5), merged by the owner. `/projects/local-ai-stack/`, `/projects/themes/` and `/projects/kiosk/` are live, and the Local AI stack page's two diagrams draw on the live site.
 
+## Later changes
+
+- **2026-11-27 (owner):** the Setups section is removed. The site has two sections, Blog and Projects. The home page shows only the latest posts. oscar-wallpaper is listed as a project, and its two pages keep their URLs (D2).
+
 ## Open questions
 
 | Question | Default until answered |

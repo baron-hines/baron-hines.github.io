@@ -343,8 +343,8 @@ button:focus-visible {
 }
 .site-nav a { color: var(--nav-fg); text-decoration: none; }
 .site-nav a:hover { color: var(--link); }
-.site-nav a[aria-current="page"] { color: var(--nav-current); }
-.site-nav a[aria-current="page"]::before { content: var(--nav-current-prefix); }
+.site-nav a[aria-current] { color: var(--nav-current); }
+.site-nav a[aria-current]::before { content: var(--nav-current-prefix); }
 
 /* Light/dark toggle: in the header, or floating if a page has no header */
 .theme-toggle {
