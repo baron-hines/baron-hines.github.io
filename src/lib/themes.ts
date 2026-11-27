@@ -97,7 +97,7 @@ function parseTokens(css: string): Token[] {
 
 function parsePatterns(components: string): Pattern[] {
   const start = components.search(/^### Markup patterns\s*$/m);
-  if (start < 0) return [];
+  if (start < 0) throw new Error('THEME.md has no "### Markup patterns" section under Components');
   const text = components.slice(start).split("\n").slice(1).join("\n");
   const patterns: Pattern[] = [];
   const re = /([^\n`][^\n]*)\n+```html\n([\s\S]*?)```/g;
@@ -119,7 +119,11 @@ export function loadTheme(id: string): ThemeSource {
     tokensCss,
     componentsCss,
     tokens: parseTokens(tokensCss),
-    patterns: parsePatterns(components),
+    patterns: (() => {
+      const patterns = parsePatterns(components);
+      if (patterns.length === 0) throw new Error(`THEME.md for ${id} has no html blocks under "### Markup patterns"`);
+      return patterns;
+    })(),
   };
 }
 
