@@ -22,6 +22,8 @@ jobs:
         with:
           # The themes repo, which the theme pages are built from.
           submodules: true
+          # Full history: each project shows the date of its last commit.
+          fetch-depth: 0
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc

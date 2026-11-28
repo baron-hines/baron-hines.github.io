@@ -5,6 +5,7 @@ import Illustrations from "../../../components/Illustrations.astro";
 import Mermaid from "../../../components/Mermaid.astro";
 import Status from "../../../components/Status.astro";
 import Tags from "../../../components/Tags.astro";
+import Updated from "../../../components/Updated.astro";
 import { hasMermaid, projects } from "../../../lib/content";
 
 export async function getStaticPaths() {
@@ -24,6 +25,7 @@ const repoName = repo?.replace(/^https:\/\/github\.com\//, "").replace(/\/$/, ""
     <h1 class:list={{ "keep-case": project.data.keepCase }}>{project.data.title}</h1>
     <div class="article-meta">
       <Status status={project.data.status} />
+      <Updated id={project.id} />
       <Tags tags={project.data.tags} />
     </div>
     <p>{project.data.summary}</p>

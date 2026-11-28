@@ -4,6 +4,7 @@
 // rail, so the home page shows both sections while /blog/ and /projects/ stay
 // single lists.
 import Status from "./Status.astro";
+import Updated from "./Updated.astro";
 import { projects } from "../lib/content";
 
 // Projects with `featured: true`. If none are featured, the active ones, and
@@ -27,7 +28,10 @@ const heading = featured.length > 0 || active.length > 0 ? "Projects" : "Recentl
               <a href={`/projects/${project.id}/`}>{project.data.title}</a>
             </h3>
             <p class="rail__summary">{project.data.summary}</p>
-            <Status status={project.data.status} />
+            <div class="rail__meta">
+              <Status status={project.data.status} />
+              <Updated id={project.id} />
+            </div>
           </li>
         ))}
       </ul>
