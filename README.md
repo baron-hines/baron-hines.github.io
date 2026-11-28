@@ -102,7 +102,7 @@ Delete the file. It disappears from the blog, the home page, RSS and the sitemap
 - Ordinary Markdown: headings, lists, tables, quotes, links, images.
 - Code blocks with a language (```` ```ts ````) are highlighted in the current theme's colors.
 - A ```` ```mermaid ```` block is drawn as a diagram and redrawn when the theme toggles. Mermaid is only loaded on pages that have one. Bar charts use `xychart-beta`. Keep their x-axis labels short, because they run together in Neon Terminal's monospace font.
-- A hand-drawn illustration is an inline `<svg>` inside `<figure class="diagram illustration">`, with no blank lines in it. Color it only with the `ill-*` classes in [`src/styles/code.css`](src/styles/code.css), so it follows the theme. [`coding-stack.md`](src/content/projects/coding-stack.md) has one.
+- A hand-drawn illustration is an `.svg` file next to the Markdown, added on a line of its own as `<img class="illustration" src="name.svg" alt="…">`. GitHub shows it as an image. On the site, [`src/components/Illustrations.astro`](src/components/Illustrations.astro) puts the SVG's markup into the page instead, so its `<style>` can color it from the theme tokens and it follows the light/dark toggle. Give every color a `var(--token, fallback)` so it still looks right on GitHub. [`coding-stack.svg`](src/content/projects/coding-stack.svg) is the example.
 
 ## Projects
 

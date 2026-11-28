@@ -1,6 +1,7 @@
 ---
 import { render } from "astro:content";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Illustrations from "../../../components/Illustrations.astro";
 import Mermaid from "../../../components/Mermaid.astro";
 import Tags from "../../../components/Tags.astro";
 import { formatDate, hasMermaid, posts } from "../../../lib/content";
@@ -20,7 +21,7 @@ const { Content } = await render(post);
       <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
       <Tags tags={post.data.tags} />
     </div>
-    <div class="prose"><Content /></div>
+    <div class="prose"><Illustrations collection="blog"><Content /></Illustrations></div>
   </article>
   <p class="more"><a class="more-link more-link--back" href="/blog/">All posts</a></p>
   {hasMermaid(post.body) && <Mermaid />}

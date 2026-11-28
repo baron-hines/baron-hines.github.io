@@ -44,25 +44,10 @@ pre:has(> code.language-mermaid) {
 }
 .diagram svg { max-width: 100%; height: auto; }
 
-/* Hand-drawn SVG illustrations in posts and projects (<figure class="diagram
-   illustration">). Colored only from the theme tokens, so they follow the
-   light/dark toggle like the Mermaid diagrams. Below 600px the figure scrolls
-   sideways rather than shrinking the labels past reading size. */
-.illustration svg { min-width: 600px; font-family: var(--font-body); }
-.illustration .ill-zone { fill: var(--surface-subtle); stroke: var(--border); stroke-width: 1; }
-.illustration .ill-tailnet { fill: none; stroke: var(--border-strong); stroke-width: 1.5; stroke-dasharray: 6 5; }
-.illustration .ill-zone-label { fill: var(--fg-muted); font: 600 12px var(--font-label); letter-spacing: 0.06em; text-transform: uppercase; }
-.illustration .ill-node { fill: var(--surface); stroke: var(--border-strong); stroke-width: 1; }
-.illustration .ill-node--key { fill: var(--diagram-node); stroke: var(--diagram-line); stroke-width: 1.5; }
-.illustration .ill-text { fill: var(--fg); font-size: 15px; text-anchor: middle; }
-.illustration .ill-edge { fill: none; stroke: var(--diagram-line); stroke-width: 1.5; }
-.illustration .ill-edge--soft { stroke-dasharray: 4 4; }
-.illustration .ill-head { fill: var(--diagram-line); }
-.illustration .ill-label {
-  fill: var(--fg-muted);
-  font: 12px var(--font-label);
-  paint-order: stroke;
-  stroke: var(--surface);
-  stroke-width: 5px;
-  stroke-linejoin: round;
-}
+/* Hand-drawn SVG illustrations: an .svg file next to the Markdown, inlined
+   into <figure class="diagram illustration"> at build time by
+   src/components/Illustrations.astro. The SVG's own <style> colors it from the
+   theme tokens, with fallbacks for when GitHub shows it as a plain image.
+   Below 600px the figure scrolls sideways rather than shrinking the labels
+   past reading size. */
+.illustration svg { min-width: 600px; }
