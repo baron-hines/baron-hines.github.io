@@ -10,7 +10,7 @@ This is how I build things: the home server's repos, the PCs' setup, and this si
 
 [Local AI stack](/projects/local-ai-stack/) covers the models. This page covers how the work moves.
 
-<img class="illustration" src="coding-stack.svg" alt="Overview of the coding stack: my PC (Claude Code app, claude in a terminal) and the home server (Forgejo, Kanzo, LiteLLM, Docker stacks) on one Tailscale tailnet, with GitHub, Anthropic and Vertex AI in the cloud.">
+<img class="illustration" src="coding-stack.svg" alt="Overview of the coding stack: my PC (Claude Code, as the desktop app and in a terminal) and the home server (Forgejo, Kanzo, LiteLLM, Docker stacks) on one Tailscale tailnet, with GitHub, Anthropic and Vertex AI in the cloud.">
 
 The pieces:
 
@@ -49,11 +49,11 @@ flowchart TB
 
 ## Claude Code
 
-[Claude Code](https://claude.com/claude-code) is where nearly all the code comes from. I use it two ways.
+[Claude Code](https://claude.com/claude-code) is where nearly all the code comes from. I use it two ways, and both get the same setup: the Kanzo board over MCP, `gh` for GitHub, and the rules below. The board connection lives in my user-level Claude Code config, so every session on the PC has it, whichever model is answering.
 
-**The desktop app's Code tab** is the main one. Each task gets its own session and its own git worktree, so several can run at once without touching each other's files, and a session can reach into more than one repo when a change spans them. A session can use the board over MCP, a browser it can drive to check a page it just built, and `gh` for GitHub.
+**The desktop app's Code tab** is the main one. Each task gets its own session and its own git worktree, so several can run at once without touching each other's files, and a session can reach into more than one repo when a change spans them. A session there also has a browser it can drive, to check a page it just built.
 
-**`claude` in a terminal** is the same tool with a different model behind it. Two small PowerShell launchers start it against my own models instead of Anthropic's:
+**`claude` in a terminal** is the same tool. Run plainly, it uses Anthropic's models like the app. Two small PowerShell launchers start it against my own models instead:
 
 ```mermaid
 flowchart LR

@@ -1,10 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" class="ill" viewBox="0 0 720 470" width="720" height="470" role="img" aria-labelledby="lcs-title lcs-desc">
 <title id="lcs-title">The local coding stack at a glance</title>
-<desc id="lcs-desc">My PC runs Claude Code, as the desktop app and in a terminal. It talks to Anthropic for the model, to GitHub to push and open PRs, to the Kanzo board over MCP, and, from a terminal, to the LiteLLM gateway. On the home server, Forgejo gets GitHub's webhooks through Tailscale Funnel, runs the checks, reports them back to GitHub, and deploys the Docker stacks. The PC, the server and my phone are on one tailnet.</desc>
+<desc id="lcs-desc">My PC runs Claude Code, as the desktop app and in a terminal. Either one talks to Anthropic for the model, to GitHub to push and open PRs, and to the Kanzo board over MCP. Started with cloud-code, the terminal version gets its model from the LiteLLM gateway instead. On the home server, Forgejo gets GitHub's webhooks through Tailscale Funnel, runs the checks, reports them back to GitHub, and deploys the Docker stacks. The PC, the server and my phone are on one tailnet.</desc>
 <style>
 svg.ill { font-family: var(--font-body, "IBM Plex Sans", system-ui, sans-serif); }
 svg.ill .ill-bg { fill: var(--surface, #ffffff); }
 svg.ill .ill-zone { fill: var(--surface-subtle, #eff6f8); stroke: var(--border, #d5e4e8); stroke-width: 1; }
+svg.ill .ill-group { fill: var(--surface, #ffffff); stroke: var(--diagram-line, #0e7490); stroke-width: 1.5; }
 svg.ill .ill-tailnet { fill: none; stroke: var(--border-strong, #b8cfd6); stroke-width: 1.5; stroke-dasharray: 6 5; }
 svg.ill .ill-zone-label { fill: var(--fg-muted, #4a6670); font: 600 12px var(--font-label, "IBM Plex Mono", ui-monospace, monospace); letter-spacing: 0.06em; text-transform: uppercase; }
 svg.ill .ill-node { fill: var(--surface, #ffffff); stroke: var(--border-strong, #b8cfd6); stroke-width: 1; }
@@ -16,6 +17,7 @@ svg.ill .ill-head { fill: var(--diagram-line, #0e7490); }
 svg.ill .ill-label { fill: var(--fg-muted, #4a6670); font: 12px var(--font-label, "IBM Plex Mono", ui-monospace, monospace); paint-order: stroke; stroke: var(--surface, #ffffff); stroke-width: 5px; stroke-linejoin: round; }
 @media (prefers-color-scheme: dark) {
   svg.ill .ill-bg, svg.ill .ill-node { fill: var(--surface, #0b1216); }
+  svg.ill .ill-group { fill: var(--surface, #0b1216); stroke: var(--diagram-line, #00f0ff); }
   svg.ill .ill-zone { fill: var(--surface-subtle, #0f191f); stroke: var(--border, #1b3a45); }
   svg.ill .ill-tailnet, svg.ill .ill-node { stroke: var(--border-strong, #1b3a45); }
   svg.ill .ill-zone-label, svg.ill .ill-label { fill: var(--fg-muted, #6fa3ad); }
@@ -40,12 +42,14 @@ svg.ill .ill-label { fill: var(--fg-muted, #4a6670); font: 12px var(--font-label
 <text class="ill-text" x="595" y="67">Vertex AI</text>
 <rect class="ill-tailnet" x="10" y="132" width="700" height="328" rx="12"/>
 <text class="ill-zone-label" x="26" y="154">Tailscale tailnet</text>
-<rect class="ill-zone" x="30" y="232" width="250" height="148" rx="10"/>
-<text class="ill-zone-label" x="46" y="252">My PC</text>
-<rect class="ill-node ill-node--key" x="50" y="262" width="210" height="44" rx="6"/>
-<text class="ill-text" x="155" y="289">Claude Code app</text>
-<rect class="ill-node" x="50" y="320" width="210" height="44" rx="6"/>
-<text class="ill-text" x="155" y="347">claude, in a terminal</text>
+<rect class="ill-zone" x="30" y="196" width="250" height="188" rx="10"/>
+<text class="ill-zone-label" x="46" y="216">My PC</text>
+<rect class="ill-group" x="42" y="226" width="226" height="146" rx="8"/>
+<text class="ill-zone-label" x="56" y="246">Claude Code</text>
+<rect class="ill-node ill-node--key" x="56" y="256" width="198" height="44" rx="6"/>
+<text class="ill-text" x="155" y="283">Desktop app</text>
+<rect class="ill-node ill-node--key" x="56" y="314" width="198" height="44" rx="6"/>
+<text class="ill-text" x="155" y="341">In a terminal</text>
 <rect class="ill-zone" x="30" y="396" width="250" height="48" rx="10"/>
 <text class="ill-text" x="155" y="425">Phone, laptop</text>
 <rect class="ill-zone" x="440" y="170" width="250" height="274" rx="10"/>
@@ -58,18 +62,18 @@ svg.ill .ill-label { fill: var(--fg-muted, #4a6670); font: 12px var(--font-label
 <text class="ill-text" x="565" y="347">LiteLLM gateway</text>
 <rect class="ill-node" x="460" y="382" width="210" height="44" rx="6"/>
 <text class="ill-text" x="565" y="409">Docker stacks</text>
-<path class="ill-edge" d="M110,262 L110,84" marker-end="url(#lcs-arrow)"/>
-<text class="ill-label" x="104" y="190" text-anchor="end">model</text>
-<path class="ill-edge" d="M215,262 L320,84" marker-end="url(#lcs-arrow)"/>
-<text class="ill-label" x="282" y="190" text-anchor="start">push, PR</text>
+<path class="ill-edge" d="M110,226 L110,84" marker-end="url(#lcs-arrow)"/>
+<text class="ill-label" x="104" y="184" text-anchor="end">model</text>
+<path class="ill-edge" d="M215,226 L320,84" marker-end="url(#lcs-arrow)"/>
+<text class="ill-label" x="258" y="184" text-anchor="start">push, PR</text>
 <path class="ill-edge" d="M392,84 L492,198" marker-end="url(#lcs-arrow)"/>
 <text class="ill-label" x="436" y="150" text-anchor="end">webhook (Funnel)</text>
 <path class="ill-edge" d="M532,198 L432,84" marker-end="url(#lcs-arrow)"/>
 <text class="ill-label" x="490" y="140" text-anchor="start">checks</text>
-<path class="ill-edge" d="M260,284 L458,284" marker-end="url(#lcs-arrow)"/>
-<text class="ill-label" x="359" y="276" text-anchor="middle">MCP</text>
-<path class="ill-edge" d="M260,342 L458,342" marker-end="url(#lcs-arrow)"/>
-<text class="ill-label" x="359" y="334" text-anchor="middle">cloud-code</text>
+<path class="ill-edge" d="M268,284 L458,284" marker-end="url(#lcs-arrow)"/>
+<text class="ill-label" x="363" y="276" text-anchor="middle">MCP</text>
+<path class="ill-edge" d="M254,342 L458,342" marker-end="url(#lcs-arrow)"/>
+<text class="ill-label" x="363" y="334" text-anchor="middle">cloud-code</text>
 <path class="ill-edge" d="M670,342 L698,342 L698,62 L682,62" marker-end="url(#lcs-arrow)"/>
 <path class="ill-edge" d="M670,222 L684,222 L684,404 L672,404" marker-end="url(#lcs-arrow)"/>
 <text class="ill-label" x="676" y="374" text-anchor="end">deploy</text>
