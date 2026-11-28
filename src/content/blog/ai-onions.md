@@ -3,7 +3,6 @@ title: "AI onions: layers can make you cry"
 date: 2026-11-28
 summary: Running Claude Code on DeepSeek through LiteLLM and Vertex AI, and why most of the bugs lived between the layers, not in the model.
 tags: [deepseek, litellm, claude-code, vertex-ai, agents]
-draft: true
 ---
 
 I wanted Claude Code's agent loop running on a cheaper model that I control, with a budget and a log of every request. The model I picked is DeepSeek V4.1 Flash, served by Google's Vertex AI. Claude Code doesn't talk to Vertex, so every request goes through a few other programs first.
