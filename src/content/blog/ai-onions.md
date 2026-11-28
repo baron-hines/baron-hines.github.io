@@ -76,21 +76,6 @@ PowerShell binds arguments it doesn't recognize to parameters by position. `--ou
 
 This isn't an AI bug, but it showed how simple choices were adding complexity. A lot of this comes from using a brand new stack, but it's still humbling to realize how many of the problems you caused yourself.
 
-## The schema proxy
-
-This layer exists only to keep two other layers compatible. A few of Claude Code's tool schemas restrict a string with a regular expression that uses lookahead. This is one of them, for a document id:
-
-```json
-"doc_id": {
-  "type": "string",
-  "pattern": "^(?!\\.\\.?(?:\\/|$))[A-Za-z0-9_\\-.~:@+]{1,200}$"
-}
-```
-
-The `(?!` is a negative lookahead, which here stops an id like `..`. The grammar compiler on Vertex rejects lookaround, and the whole request fails. A small Python proxy on my PC strips those patterns from each request before it goes out and passes everything else through untouched.
-
-When I went looking for this example, every lookaround pattern in the request turned out to belong to `ArtifactData`, one of the artifact tools I'd just turned off. The proxy may have nothing left to strip. I'm keeping it until a Claude Code update proves otherwise.
-
 ## LiteLLM
 
 LiteLLM is the gateway on my home server, and it's the layer that made the rest fixable. Callers ask for an alias like `cloud-manual-coder`, never a vendor's model name. Each tool gets its own key with a monthly budget, so a runaway loop costs at most that budget.
