@@ -482,6 +482,9 @@ button:focus-visible {
 .rail__item {
   /* The whole card is the tap target (the title link's ::after covers it), so
    * a minimum here satisfies WCAG 2.5.8 without touching the link itself. */
+  /* The containing block for the title link's ::after, so the whole card
+   * (summary and status too) is clickable, as with .card. */
+  position: relative;
   min-height: 24px;
   padding: 12px 16px;
   background: var(--card-bg);
@@ -494,7 +497,6 @@ button:focus-visible {
 .rail__item:hover { border-color: var(--card-border-hover); box-shadow: var(--card-shadow-hover); }
 .rail__item:focus-within { border-color: var(--card-border-hover); }
 .rail__title {
-  position: relative;
   margin: 0 0 4px;
   font: var(--h3);
   text-transform: var(--heading-case);
