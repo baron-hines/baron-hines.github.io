@@ -24,6 +24,10 @@
       const css = getComputedStyle(document.documentElement);
       const token = (name: string) => css.getPropertyValue(name).trim();
       const font = token("--font-body");
+      // Text is measured when drawn, so the theme's font must be loaded first.
+      // A theme's font is only fetched once that theme is first shown, so this
+      // also covers the first toggle to the other theme.
+      await document.fonts.load(`14px ${font}`, "Aa");
       mermaid.initialize({
         startOnLoad: false,
         securityLevel: "strict",
@@ -68,8 +72,6 @@
       }
     }
 
-    // Text is measured when drawn, so wait for the web fonts first.
-    await document.fonts.ready;
     await draw();
     document.addEventListener("themechange", () => void draw());
   })();
