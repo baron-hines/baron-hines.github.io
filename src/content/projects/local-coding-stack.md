@@ -212,8 +212,3 @@ flowchart LR
 - **Funnel, for what has to be public.** Only three paths are on the internet: the GitHub webhook for the repo sync, the one for the coding agent, and n8n's production webhook. Every path on a Funnel port is public, so the n8n editor sits on a second, tailnet-only port. Both GitHub endpoints turn away any call without GitHub's signature.
 - **The setup is a script.** The server's Tailscale install, settings and Funnel paths come from a script in its repo, checked against a saved snapshot. Running it again on a server that's already set up changes nothing.
 - **The policy is code.** The tailnet's access rules live in their own repo. CI tests every change on the PR and applies it on merge, signing in with GitHub's OIDC identity, so no Tailscale secret is stored anywhere.
-
-## What's next
-
-- **Claude Code as its own GitHub bot.** Today its PRs are opened as me, so I can't approve them. It's planned to open PRs and comments through a GitHub App of its own, the way the coding agent does, while pushing and merging stay mine.
-- **Clearing old cards.** Cards that have been done for a while will come off the board. The backup keeps them.
