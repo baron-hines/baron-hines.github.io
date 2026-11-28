@@ -461,6 +461,8 @@ button:focus-visible {
 .status--active { color: var(--status-active); }
 .status--paused { color: var(--status-paused); }
 .status--done { color: var(--status-done); }
+/* "Updated <date>" beside a project's status. */
+.updated { font: 13px/20px var(--font-label); color: var(--fg-muted); white-space: nowrap; }
 
 /* ---- Side rail (home page only) ---- */
 /* Posts in the main column, projects in a rail to their right. Below 60rem
@@ -506,6 +508,7 @@ button:focus-visible {
 .rail__title a::after { content: ""; position: absolute; inset: 0; }
 .rail__title a:focus-visible { outline: none; box-shadow: none; }
 .rail__summary { margin: 0 0 8px; font-size: 14px; line-height: 21px; color: var(--fg-muted); }
+.rail__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
 .rail__more { margin: 16px 0 0; }
 
 /* "All posts" / "All projects": a small label-style link with an arrow,

@@ -131,6 +131,7 @@ The write-up, in Markdown.
 | `title` | yes | |
 | `summary` | yes | Shown on the card and in link previews. |
 | `status` | yes | `active`, `paused` or `done`. The list is sorted in that order. Shown as "● Active" in light mode and `[ACTIVE]` in dark. |
+| *(last updated)* | | Not a field. Each project shows "Updated <date>" from the newest commit that touched its `.md` (or its `.svg` drawing), so a change shows once it's committed. |
 | `featured` | no | `true` lists the project in the home page's [side rail](#the-side-rail). Every project is on `/projects/` either way. |
 | `keepCase` | no | `true` when the title is a lowercase name (`oscar-wallpaper`), so Neon Terminal's uppercase headings leave it as written. |
 | `repo` | no | **Public repos only.** Adds a "Source on GitHub" link. Leave it out for a private repo. |
