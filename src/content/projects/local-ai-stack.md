@@ -2,10 +2,11 @@
 title: Local AI stack
 summary: One LiteLLM gateway in front of every model, local and cloud, with n8n workflows, shared memory in Chroma, a coding agent that turns labelled issues into draft PRs, and Tailscale for getting in and out.
 status: active
+featured: true
 tags: [litellm, n8n, chroma, tailscale, deepseek, ollama, agents, claude-code]
 ---
 
-This is the AI side of my home server, and the project I spend most of my time on right now. Everything runs in Docker on the server, except the models on my GPU PC and the cloud ones. Each piece has its own config in git, and merging to `main` deploys it.
+This is the AI side of my home server, and the project I spend most of my time on right now. Everything runs in Docker on the server, except the models on my GPU PC and the cloud ones. Each piece has its own config in git, and merging to `main` deploys it. [Local coding stack](/projects/local-coding-stack/) covers how that code gets written, checked and deployed.
 
 Everything that talks to a model goes through one gateway. The callers are workflows, a coding agent, and Claude Code. The gateway decides which model actually answers. Callers ask for a role, like "a coder" or "something to name media files", and I can change the model behind that role without touching them.
 

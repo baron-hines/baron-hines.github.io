@@ -27,7 +27,7 @@ const latest = (await posts()).slice(0, 3);
           <p class="empty">No posts yet.</p>
         )
       }
-      {latest.length > 0 && <p><a href="/blog/">All posts</a></p>}
+      {latest.length > 0 && <p class="more"><a class="more-link" href="/blog/">All posts</a></p>}
     </div>
 
     <SideRail />

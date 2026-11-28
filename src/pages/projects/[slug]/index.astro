@@ -48,6 +48,6 @@ const repoName = repo?.replace(/^https:\/\/github\.com\//, "").replace(/\/$/, ""
     }
     <div class="prose"><Content /></div>
   </article>
-  <p><a href="/projects/">All projects</a></p>
+  <p class="more"><a class="more-link more-link--back" href="/projects/">All projects</a></p>
   {hasMermaid(project.body) && <Mermaid />}
 </BaseLayout>

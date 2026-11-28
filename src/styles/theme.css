@@ -506,7 +506,29 @@ button:focus-visible {
 .rail__title a::after { content: ""; position: absolute; inset: 0; }
 .rail__title a:focus-visible { outline: none; box-shadow: none; }
 .rail__summary { margin: 0 0 8px; font-size: 14px; line-height: 21px; color: var(--fg-muted); }
-.rail__more { margin: 16px 0 0; font-size: 14px; }
+.rail__more { margin: 16px 0 0; }
+
+/* "All posts" / "All projects": a small label-style link with an arrow,
+   forward (→) under a list, back (←) at the foot of a post or project. */
+.more { margin: 24px 0 0; }
+.more-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-label);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+.more-link::after { content: "\2192"; transition: transform 0.15s ease; }
+.more-link--back::after { content: none; }
+.more-link--back::before { content: "\2190"; transition: transform 0.15s ease; }
+.more-link:hover { text-decoration: underline; }
+.more-link:hover::after { transform: translateX(3px); }
+.more-link--back:hover::before { transform: translateX(-3px); }
+@media (prefers-reduced-motion: reduce) {
+  .more-link::after, .more-link::before { transition: none; }
+}
 
 @media (max-width: 60rem) {
   .home { grid-template-columns: 1fr; gap: 40px; }

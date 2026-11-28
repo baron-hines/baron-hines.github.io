@@ -22,6 +22,6 @@ const { Content } = await render(post);
     </div>
     <div class="prose"><Content /></div>
   </article>
-  <p><a href="/blog/">All posts</a></p>
+  <p class="more"><a class="more-link more-link--back" href="/blog/">All posts</a></p>
   {hasMermaid(post.body) && <Mermaid />}
 </BaseLayout>

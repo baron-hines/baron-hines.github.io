@@ -102,6 +102,7 @@ Delete the file. It disappears from the blog, the home page, RSS and the sitemap
 - Ordinary Markdown: headings, lists, tables, quotes, links, images.
 - Code blocks with a language (```` ```ts ````) are highlighted in the current theme's colors.
 - A ```` ```mermaid ```` block is drawn as a diagram and redrawn when the theme toggles. Mermaid is only loaded on pages that have one. Bar charts use `xychart-beta`. Keep their x-axis labels short, because they run together in Neon Terminal's monospace font.
+- A hand-drawn illustration is an inline `<svg>` inside `<figure class="diagram illustration">`, with no blank lines in it. Color it only with the `ill-*` classes in [`src/styles/code.css`](src/styles/code.css), so it follows the theme. [`local-coding-stack.md`](src/content/projects/local-coding-stack.md) has one.
 
 ## Projects
 
@@ -130,6 +131,7 @@ The write-up, in Markdown.
 | `title` | yes | |
 | `summary` | yes | Shown on the card and in link previews. |
 | `status` | yes | `active`, `paused` or `done`. The list is sorted in that order. Shown as "● Active" in light mode and `[ACTIVE]` in dark. |
+| `featured` | no | `true` lists the project in the home page's [side rail](#the-side-rail). Every project is on `/projects/` either way. |
 | `keepCase` | no | `true` when the title is a lowercase name (`oscar-wallpaper`), so Neon Terminal's uppercase headings leave it as written. |
 | `repo` | no | **Public repos only.** Adds a "Source on GitHub" link. Leave it out for a private repo. |
 | `links` | no | Extra links, each with a `label` and an `href`. |
@@ -156,7 +158,7 @@ A project can have its own pages under its URL, as Themes does. Put them in `src
 
 Only the home page has a **side rail** ([`src/components/SideRail.astro`](src/components/SideRail.astro)): the latest posts on the left, projects on the right, so the front page shows both sections. `/blog/` and `/projects/` are single lists at the normal reading width.
 
-The rail lists active projects. If none are active it lists the finished ones under "Recently finished", so the two-column layout never collapses. It uses the same `projects()` helper from [`src/lib/content.ts`](src/lib/content.ts) as `/projects/`.
+The rail lists the projects with `featured: true` in their front matter (today the two stack pages). If none are featured it lists the active ones, and if none are active, the finished ones under "Recently finished", so the two-column layout never collapses. It uses the same `projects()` helper from [`src/lib/content.ts`](src/lib/content.ts) as `/projects/`.
 
 The home page passes `wide` to `BaseLayout` (`.container--wide`, 66rem) to make room for it; every other page keeps 44rem. Below 60rem the rail drops under the posts and its cards go two-up; below 34rem they stack.
 
