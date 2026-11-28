@@ -1,12 +1,12 @@
 ---
-title: Local coding stack
-summary: How I write code with Claude Code. A kanban board the agents keep current over MCP, plans kept in git, a home Forgejo that runs CI and deploys, and Tailscale connecting the machines.
+title: Coding stack
+summary: How my code gets written and shipped. Claude Code sessions, a coding agent that turns labelled issues into draft PRs, a kanban board the agents keep current over MCP, a home Forgejo for CI and deploys, and Tailscale connecting it all.
 status: active
 featured: true
-tags: [claude-code, kanzo, forgejo, tailscale, mcp, ci]
+tags: [claude-code, n8n, agents, kanzo, forgejo, tailscale, mcp, ci]
 ---
 
-This is how I build things: the home server's repos, the PCs' setup, and this site. Most of the code is written by Claude Code, in sessions I start and steer. Everything around those sessions runs at home: the board that tracks the work, the CI that checks it, and the deploy that ships it. GitHub holds the code and the PRs.
+This is how I build things: the home server's repos, the PCs' setup, and this site. Most of the code is written by Claude Code, in sessions I start and steer. The rest comes from a coding agent that works on its own, starting from a labelled GitHub issue. Everything around those sessions runs at home: the board that tracks the work, the CI that checks it, and the deploy that ships it. GitHub holds the code and the PRs.
 
 [Local AI stack](/projects/local-ai-stack/) covers the models. This page covers how the work moves.
 
@@ -65,13 +65,14 @@ This is how I build things: the home server's repos, the PCs' setup, and this si
 </svg>
 </figure>
 
-Four pieces do the work:
+The pieces:
 
 | Piece | What it does here |
 |---|---|
 | **Claude Code** | Writes the code, as the desktop app's Code tab or the `claude` command in a terminal |
 | **[Kanzo](https://github.com/emanuele-em/kanzo)** | The kanban board for every project. People and agents both use it, the agents over MCP. |
 | **[Forgejo](https://forgejo.org/)** | Runs CI on copies of the GitHub repos, reports the results on the PR, and deploys on merge |
+| **The coding agent** | Turns a labelled GitHub issue into a draft PR, and asks me questions in Discord through n8n |
 | **[Tailscale](https://tailscale.com/)** | Connects my machines, and opens the few doors the internet needs |
 
 ## How a change goes
@@ -136,6 +137,43 @@ The same instructions load into every session, so the work comes out the same wh
 ### Watching it
 
 Claude Code sends its usage to Prometheus over OpenTelemetry: tokens, estimated cost, sessions, active time and lines changed. A Grafana dashboard on the PC shows it.
+
+## The coding agent
+
+Claude Code needs me in the session. For work I can hand off, a coding agent on the home server takes a GitHub issue and comes back with a draft PR. [n8n](https://n8n.io/) connects it to Discord, so the agent can ask me questions while it works.
+
+```mermaid
+sequenceDiagram
+  participant Me
+  participant GH as GitHub
+  participant A as Agent service
+  participant S as Sandbox
+  participant N as n8n
+  participant D as Discord
+  Me->>GH: Label the issue
+  GH->>A: Webhook, through Funnel
+  A->>N: Job started
+  N->>D: A thread for the job
+  A->>S: Clone, start the agent
+  S->>A: ask_owner
+  A->>N: The question
+  N->>D: Post it in the thread
+  Me->>D: Reply
+  D->>N: Discord reply workflow
+  N->>A: The answer
+  A->>S: Carry on
+  S-->>A: Commits and a summary
+  A->>GH: Push, draft PR
+  A->>N: Ready for review
+  N->>D: The PR link
+```
+
+- **The label picks the model.** `agent:local` runs on gpt-oss-20b on the GPU PC, and `agent:cloud` on DeepSeek on Vertex AI. Both go through the gateway, with the agent's own key and a monthly budget. One local job and two cloud jobs run at once, and the rest wait their turn.
+- **n8n does the talking.** The agent service never talks to Discord itself. It hands each status line and question to an n8n workflow, which posts it through a small Discord bot, one thread per job. My reply in the thread goes to a second workflow, which passes it to the waiting job. A job's one-hour clock stops while it waits, for up to 24 hours and three questions.
+- **A sandbox with nothing to steal.** Each job runs in a fresh container on its own Docker daemon, with [OpenHands](https://github.com/All-Hands-AI/OpenHands) or [opencode](https://github.com/sst/opencode) inside. The container has no GitHub credentials. It can reach the gateway and the internet, and nothing else on my network.
+- **Checked before it pushes.** The service refuses a change to a CI workflow or an `.env` file, and a change without a summary. Otherwise it pushes a new branch and opens a draft PR that closes the issue. A failed job comments why on the issue and pushes nothing.
+- **Its own name on GitHub.** The service pushes and comments as a GitHub App, so its PRs come from a bot, and I review and approve them like anyone else's. Forgejo runs the same checks on them as on mine.
+- **Signed like everything else.** Every commit names the tool and the real model behind the alias. If the agent forgets the trailer, the service adds it before pushing.
 
 ## Kanzo, the board
 

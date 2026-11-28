@@ -6,7 +6,7 @@ featured: true
 tags: [litellm, n8n, chroma, tailscale, deepseek, ollama, agents, claude-code]
 ---
 
-This is the AI side of my home server, and the project I spend most of my time on right now. Everything runs in Docker on the server, except the models on my GPU PC and the cloud ones. Each piece has its own config in git, and merging to `main` deploys it. [Local coding stack](/projects/local-coding-stack/) covers how that code gets written, checked and deployed.
+This is the AI side of my home server, and the project I spend most of my time on right now. Everything runs in Docker on the server, except the models on my GPU PC and the cloud ones. Each piece has its own config in git, and merging to `main` deploys it. [Coding stack](/projects/coding-stack/) covers how that code gets written, checked and deployed.
 
 Everything that talks to a model goes through one gateway. The callers are workflows, a coding agent, and Claude Code. The gateway decides which model actually answers. Callers ask for a role, like "a coder" or "something to name media files", and I can change the model behind that role without touching them.
 
@@ -72,24 +72,7 @@ The two cloud aliases have the same model today. They're separate so either one 
 
 ## The coding agent
 
-To hand a task to the agent, I put a label on a GitHub issue in one of my infrastructure repos. The label picks the local or the cloud model.
-
-```mermaid
-flowchart LR
-  issue["Labelled issue"] --> svc["Agent service"]
-  svc --> box["Sandbox<br/>OpenHands or opencode"]
-  box -- "model calls" --> gw["Gateway"]
-  box -- "ask_owner" --> discord["Discord thread"]
-  discord -- "my reply" --> box
-  svc -- "draft PR" --> pr["GitHub"]
-```
-
-1. GitHub's webhook comes in through Tailscale Funnel to a small service on the server, which checks GitHub's signature.
-2. The service clones the repo and starts a fresh sandbox container on its own Docker daemon. The agent inside is [OpenHands](https://github.com/All-Hands-AI/OpenHands) or [opencode](https://github.com/sst/opencode). The sandbox has no GitHub credentials and can reach only the gateway and the internet, nothing else on my network. A job gets up to an hour.
-3. If the agent needs a decision, it calls an `ask_owner` tool. The question goes through n8n into a Discord thread, and my reply in that thread goes back to the waiting job.
-4. When it finishes, the service checks the result. It refuses changes to CI workflows or `.env` files, and changes without a summary. Otherwise it pushes a new branch and opens a **draft** PR that closes the issue. It pushes and comments as its own GitHub App, so I review and approve its PRs like anyone else's.
-
-Every commit the agent makes ends with a trailer naming the tool and the real model behind the alias. Every PR description ends with a matching footer. The service adds them if the agent forgets.
+To hand a task to the agent, I put a label on a GitHub issue in one of my infrastructure repos. The label picks the local or the cloud model. The agent works in a locked-down sandbox, asks me questions in Discord through n8n, and opens a draft PR. [Coding stack](/projects/coding-stack/#the-coding-agent) covers how it works.
 
 ## Claude Code
 
