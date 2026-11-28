@@ -9,19 +9,21 @@ const all = await posts();
 
 <BaseLayout title="Blog" description="Posts on what I'm building and learning.">
   <h1>Blog</h1>
-  <p class="muted">Posts on what I'm building and learning. <a href="/rss.xml">RSS feed</a>.</p>
-  {
-    all.length > 0 ? (
-      <ul class="cards">
-        {all.map((post) => (
-          <Card href={`/blog/${post.id}/`} title={post.data.title} summary={post.data.summary}>
-            <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
-            <Tags tags={post.data.tags} />
-          </Card>
-        ))}
-      </ul>
-    ) : (
-      <p class="empty">No posts yet.</p>
-    )
-  }
+  <div class="post-list">
+    <h2 class="section-label">Latest posts</h2>
+    {
+      all.length > 0 ? (
+        <ul class="cards">
+          {all.map((post) => (
+            <Card href={`/blog/${post.id}/`} title={post.data.title} summary={post.data.summary}>
+              <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+              <Tags tags={post.data.tags} />
+            </Card>
+          ))}
+        </ul>
+      ) : (
+        <p class="empty">No posts yet.</p>
+      )
+    }
+  </div>
 </BaseLayout>

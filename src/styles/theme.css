@@ -280,7 +280,7 @@ body {
 
 .container {
   width: 100%;
-  max-width: 44rem;
+  max-width: 52rem;
   margin: 0 auto;
   padding: 0 16px;
 }
@@ -288,9 +288,9 @@ body {
 /* main.container, not main: .container's padding would otherwise win. */
 main.container { flex: 1; padding-top: 48px; padding-bottom: 64px; }
 
-/* Home page only: a wider shell so the projects rail fits beside the posts.
- * Articles and the index pages keep .container's reading width. */
-.container--wide { max-width: 66rem; }
+/* Home page: the same width as every other page. The projects rail takes its
+ * room from the posts column, so the posts run narrower here. */
+.container--wide { max-width: 52rem; }
 main.container--wide { padding-top: 48px; padding-bottom: 64px; }
 
 h1, h2, h3 {
@@ -340,12 +340,20 @@ button:focus-visible {
   padding-bottom: 16px;
 }
 .site-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font: 600 18px/24px var(--font-heading);
   color: var(--title);
   text-decoration: none;
   text-transform: var(--heading-case);
 }
 .site-name:hover { color: var(--link-hover); }
+/* The H-in-a-box mark from favicon.svg, in the link color so it follows the theme. */
+.site-mark { flex: none; width: 24px; height: 24px; }
+.site-mark rect, .site-mark path { stroke: var(--link); fill: none; }
+.site-mark rect { stroke-width: 2; }
+.site-mark path { stroke-width: 2.6; stroke-linecap: round; }
 
 .site-nav {
   display: flex;
@@ -478,7 +486,10 @@ button:focus-visible {
 /* The rail's own section label sets its top margin; the list's label must line
  * up with it, so both lose the extra space the first-child rule would keep. */
 .home__main > .section-label,
-.rail > .section-label { margin-top: 0; }
+.rail > .section-label,
+.post-list > .section-label { margin-top: 0; }
+/* The blog's list starts where the home page's posts column does. */
+.post-list { margin-top: 8px; }
 
 .rail__list { margin: 0; padding: 0; list-style: none; }
 .rail__item {

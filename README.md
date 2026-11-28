@@ -14,6 +14,7 @@ The source of https://baron-hines.github.io/: a blog and a list of projects, bui
 - [The site's own look](#the-sites-own-look)
 - [Rules that protect the site](#rules-that-protect-the-site)
 - [Where things are](#where-things-are)
+- [Future work](#future-work)
 
 ## Running it locally
 
@@ -161,7 +162,7 @@ Only the home page has a **side rail** ([`src/components/SideRail.astro`](src/co
 
 The rail lists the projects with `featured: true` in their front matter (today the two stack pages). If none are featured it lists the active ones, and if none are active, the finished ones under "Recently finished", so the two-column layout never collapses. It uses the same `projects()` helper from [`src/lib/content.ts`](src/lib/content.ts) as `/projects/`.
 
-The home page passes `wide` to `BaseLayout` (`.container--wide`, 66rem) to make room for it; every other page keeps 44rem. Below 60rem the rail drops under the posts and its cards go two-up; below 34rem they stack.
+Every page uses the same 52rem shell (`.container`). The home page also passes `wide` to `BaseLayout`, which sets `.container--wide` to the same width, so the rail's room comes from the posts column. Below 60rem the rail drops under the posts and its cards go two-up; below 34rem they stack.
 
 ## Themes
 
@@ -237,7 +238,7 @@ These values are copied from the themes repo, not read from it. When a theme's t
 |---|---|
 | `src/content/blog/`, `src/content/projects/` | Posts and projects, one Markdown file each |
 | `src/content.config.ts` | The fields each one allows |
-| `src/pages/` | Pages and routes: home, blog, projects, theme pages, oscar-wallpaper, 404, RSS, sitemap |
+| `src/pages/` | Pages and routes: home, about, blog, projects, theme pages, oscar-wallpaper, 404, RSS, sitemap |
 | `src/layouts/BaseLayout.astro` | The page frame: head tags, header nav, footer |
 | `src/components/` | Cards, tags, status, Mermaid, the home page's side rail, the theme showcase |
 | `src/lib/` | Content helpers, and the themes repo reader |
@@ -245,3 +246,11 @@ These values are copied from the themes repo, not read from it. When a theme's t
 | `themes/` | The themes repo (submodule) |
 | `scripts/privacy-check.mjs` | The privacy check |
 | `plans/` | Plans for the site, by status |
+
+## Future work
+
+Pages the site should have but doesn't yet:
+
+- **Simracing setup.** A page on the owner's sim racing rig: the hardware, the software, and how it's set up. It would be a project page in `src/content/projects/` linked from the About page's "Outside work" section. The owner writes or approves its content.
+- **Blog posts on the roundhouse work.** The Sidekiq and MongoDB support the owner added to [roundhouse](https://github.com/roundhouse-rb/roundhouse) would make good posts. The issues are [#1047](https://github.com/roundhouse-rb/roundhouse/issues/1047) (Sidekiq) and [#1399](https://github.com/roundhouse-rb/roundhouse/issues/1399) (MongoDB).
+- **Posts on the path into programming and Ruby.** The About page's "How I got here" and "Ruby" sections would make good posts: how the owner started programming, and how a two-week internship project led to a first career job and a favorite language. Those sections were removed from the About page to keep it short.

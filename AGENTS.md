@@ -15,6 +15,10 @@ npm ci
 
 `npm run check` passing doesn't show that a page renders correctly. Before merging a UI change, build it and look at the page in light and dark mode and at a narrow width, as [Running it locally](README.md#running-it-locally) describes.
 
+## Asking the owner to review a change
+
+When you start a local preview server (`npm run dev` or `npm run preview`) and then wait for the owner to look at a change, open the page in the in-app browser right away, then tell them the URL. Use the port the server reports, for example `http://localhost:4322/about/` for the About page. Don't make them go looking for it.
+
 ## Writing posts and project pages
 
 Follow [Rules that protect the site](README.md#rules-that-protect-the-site). `npm run privacy-check` catches private IP addresses, email addresses and token prefixes. It doesn't catch hostnames, ports, domains, account or project IDs, or file paths, so leave those out by hand.

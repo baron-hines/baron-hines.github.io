@@ -10,6 +10,7 @@ const STATIC_PAGES = [
   "/",
   "/blog/",
   "/projects/",
+  "/about/",
   "/oscar-wallpaper/",
   "/oscar-wallpaper/privacy.html",
 ];
