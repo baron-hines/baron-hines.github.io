@@ -1,3 +1,5 @@
+import { execFileSync } from "node:child_process";
+import { existsSync, statSync } from "node:fs";
 import { getCollection, type CollectionEntry } from "astro:content";
 
 type Section = "blog" | "projects";
@@ -20,6 +22,22 @@ export async function projects() {
       STATUS_ORDER[a.data.status] - STATUS_ORDER[b.data.status] ||
       a.data.title.localeCompare(b.data.title),
   );
+}
+
+/**
+ * When a project last changed: the date of the newest commit that touched
+ * its Markdown file or the illustration beside it
+ * (src/content/projects/<id>.md and .svg). The date is the committer's own
+ * calendar day, so an evening commit isn't shown as the next day in UTC.
+ * CI checks out the full history (fetch-depth: 0) so this is right there too.
+ * A file with no commit yet (a new project in `npm run dev`) uses its
+ * modified time.
+ */
+export function projectUpdated(id: string): Date {
+  const files = [`src/content/projects/${id}.md`, `src/content/projects/${id}.svg`];
+  const out = execFileSync("git", ["log", "-1", "--format=%cs", "--", ...files], { encoding: "utf8" }).trim();
+  if (out) return new Date(out);
+  return new Date(Math.max(...files.filter((f) => existsSync(f)).map((f) => statSync(f).mtimeMs)));
 }
 
 export function formatDate(date: Date): string {

@@ -1,0 +1,14 @@
+---
+// "Updated November 27, 2026": when a project last changed, from git
+// (projectUpdated in src/lib/content.ts). Projects keep getting updates, so
+// this tells a reader how current the page is.
+import { formatDate, projectUpdated } from "../lib/content";
+
+interface Props {
+  id: string;
+}
+
+const date = projectUpdated(Astro.props.id);
+---
+
+<span class="updated">Updated <time datetime={date.toISOString().slice(0, 10)}>{formatDate(date)}</time></span>
