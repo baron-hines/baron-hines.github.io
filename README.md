@@ -90,6 +90,13 @@ The post, in Markdown.
 A missing or misspelled field fails the build. The schema is in [`src/content.config.ts`](src/content.config.ts).
 
 The home page shows the three newest posts. The post is also added to `/blog/`, `/rss.xml` and `/sitemap.xml` on its own.
+
+### Drafts and outlines
+
+Work in progress goes in `drafts/`, at the top of the repo: outlines, half-written posts and anything not ready to go live. The site never reads that folder, so a file there needs no `draft: true` and can be merged to `main` safely. Give it the post's front matter, and when it's ready, move it to `src/content/blog/`. It's published on the next merge.
+
+`npm run privacy-check` only scans the built site, so it doesn't check `drafts/` either. The repo is public: a draft is published as soon as it's pushed, so it follows the same [rules](#rules-that-protect-the-site) as a post.
+
 ### Updating a post
 
 Edit the file. To change the URL, rename the file. The old URL then returns 404, so only do it before anyone has linked to it.
@@ -245,6 +252,7 @@ These values are copied from the themes repo, not read from it. When a theme's t
 | `src/styles/` | The site's tokens and styles, and code block styles |
 | `themes/` | The themes repo (submodule) |
 | `scripts/privacy-check.mjs` | The privacy check |
+| `drafts/` | Posts in progress and outlines, never built (see [Drafts and outlines](#drafts-and-outlines)) |
 | `plans/` | Plans for the site, by status |
 
 ## Future work
