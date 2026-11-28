@@ -4,9 +4,9 @@ summary: Two design systems, Tidewater for light and Neon Terminal for dark, wri
 status: active
 repo: https://github.com/baron-hines/themes
 links:
-  - label: Neon Terminal, the dark theme
+  - label: Neon Terminal
     href: /projects/themes/neon-terminal/
-  - label: Tidewater, the light theme
+  - label: Tidewater
     href: /projects/themes/tidewater/
 tags: [design, css, design-systems]
 ---
