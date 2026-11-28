@@ -115,6 +115,7 @@ Proposed 2026-11-26, for the owner's review.
   - A failed edit left the conditional unbalanced, which `check` did catch.
 
   Both are why the rule below exists: a template can type-check and still render the wrong thing, so a UI change is not verified until a page has been built and looked at.
+- **2026-11-27 (owner):** the side rail is on the home page only. `/blog/` and `/projects/` go back to single lists at the reading width, and `SideRail.astro` loses its `exclude` prop, since the only page left always shows projects. The kiosk project (the LLM benchmark) is removed from the site.
 
   *Merged 2026-11-27* in [#12](https://github.com/baron-hines/baron-hines.github.io/pull/12).
 
