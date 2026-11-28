@@ -59,7 +59,7 @@ Monitor             7568
 
 The four claude.ai artifact tools at the top come to about 70,000 characters, roughly 18,000 tokens, and they can't work through LiteLLM at all.
 
-Claude Code has a `--disallowedTools` flag, and it removes tools from the request, not just from what the model may call. Turning off 12 tools I never use there brought the same one-word prompt down to 20,042 tokens. It was the cheapest fix of the week. I deleted things.
+Claude Code has a `--disallowedTools` flag, and it removes tools from the request, not just from what the model may call. Turning off 12 tools I never use there brought the same one-word prompt down to 20,042 tokens.
 
 ## The launcher
 
