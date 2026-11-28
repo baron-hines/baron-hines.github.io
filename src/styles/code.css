@@ -43,3 +43,11 @@ pre:has(> code.language-mermaid) {
   border-radius: var(--card-radius);
 }
 .diagram svg { max-width: 100%; height: auto; }
+
+/* Hand-drawn SVG illustrations: an .svg file next to the Markdown, inlined
+   into <figure class="diagram illustration"> at build time by
+   src/components/Illustrations.astro. The SVG's own <style> colors it from the
+   theme tokens, with fallbacks for when GitHub shows it as a plain image.
+   Below 600px the figure scrolls sideways rather than shrinking the labels
+   past reading size. */
+.illustration svg { min-width: 600px; }

@@ -32,6 +32,8 @@ const projects = defineCollection({
     // The title is a lowercase name (oscar-wallpaper): Neon Terminal's
     // uppercase headings leave it as written.
     keepCase: z.boolean().default(false),
+    // Listed in the home page's side rail.
+    featured: z.boolean().default(false),
     draft,
   }),
 });
