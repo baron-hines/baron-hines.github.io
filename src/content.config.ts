@@ -29,7 +29,7 @@ const projects = defineCollection({
     repo: z.url().optional(),
     links: z.array(z.object({ label: z.string(), href: z.string() })).default([]),
     tags,
-    // The title is a lowercase name (kiosk, oscar-wallpaper): Neon Terminal's
+    // The title is a lowercase name (oscar-wallpaper): Neon Terminal's
     // uppercase headings leave it as written.
     keepCase: z.boolean().default(false),
     draft,

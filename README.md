@@ -130,7 +130,7 @@ The write-up, in Markdown.
 | `title` | yes | |
 | `summary` | yes | Shown on the card and in link previews. |
 | `status` | yes | `active`, `paused` or `done`. The list is sorted in that order. Shown as "● Active" in light mode and `[ACTIVE]` in dark. |
-| `keepCase` | no | `true` when the title is a lowercase name (`kiosk`, `oscar-wallpaper`), so Neon Terminal's uppercase headings leave it as written. |
+| `keepCase` | no | `true` when the title is a lowercase name (`oscar-wallpaper`), so Neon Terminal's uppercase headings leave it as written. |
 | `repo` | no | **Public repos only.** Adds a "Source on GitHub" link. Leave it out for a private repo. |
 | `links` | no | Extra links, each with a `label` and an `href`. |
 | `tags` | no | |
@@ -142,7 +142,7 @@ Edit the file. When a project finishes or stalls, change `status`. To rename its
 
 ### Deleting a project
 
-Delete the file, or set `draft: true` to hide it without losing it. Then search for links to it from other pages (for example, `kiosk.md` links to `/projects/local-ai-stack/`), and fix or remove them:
+Delete the file, or set `draft: true` to hide it without losing it. Then search for links to it from other pages (for example, `themes.md` links to `/projects/themes/neon-terminal/`), and fix or remove them:
 
 ```powershell
 git grep -n "projects/my-tool/"
@@ -154,20 +154,11 @@ A project can have its own pages under its URL, as Themes does. Put them in `src
 
 ## The side rail
 
-Three pages — the home page, `/blog/` and `/projects/` — are laid out as two columns: the list on the left and a **side rail** on the right ([`src/components/SideRail.astro`](src/components/SideRail.astro)).
+Only the home page has a **side rail** ([`src/components/SideRail.astro`](src/components/SideRail.astro)): the latest posts on the left, projects on the right, so the front page shows both sections. `/blog/` and `/projects/` are single lists at the normal reading width.
 
-Each of them passes `exclude`, naming the section it already shows, and the rail renders the *other* one so it never repeats what is beside it:
+The rail lists active projects. If none are active it lists the finished ones under "Recently finished", so the two-column layout never collapses. It uses the same `projects()` helper from [`src/lib/content.ts`](src/lib/content.ts) as `/projects/`.
 
-| Page | The rail shows |
-|---|---|
-| `/` and `/blog/` | Active projects, or the most recently finished ones if none are active |
-| `/projects/` | The three newest posts |
-
-Articles and the other pages keep the narrower reading width; the layout uses `.container--wide` on `BaseLayout` (`wide` prop). Below 60rem the rail drops under the list and its cards go two-up; below 34rem they stack.
-
-The rail is a list of cards, so it does not need a page of its own to be useful — it is the same `projects()` and `posts()` helpers from [`src/lib/content.ts`](src/lib/content.ts) that the index pages use, filtered.
-
-`exclude` names the section the page **already shows**, and the rail renders the other one. That is deliberate: naming the opposite makes a page physically unable to ask the rail for the list it is already showing, so the same content cannot appear twice. (It was written the other way round at first and `/projects/` listed its own projects in the rail. `astro check` passed. Build the page and look at it.)
+The home page passes `wide` to `BaseLayout` (`.container--wide`, 66rem) to make room for it; every other page keeps 44rem. Below 60rem the rail drops under the posts and its cards go two-up; below 34rem they stack.
 
 ## Themes
 
@@ -245,7 +236,7 @@ These values are copied from the themes repo, not read from it. When a theme's t
 | `src/content.config.ts` | The fields each one allows |
 | `src/pages/` | Pages and routes: home, blog, projects, theme pages, oscar-wallpaper, 404, RSS, sitemap |
 | `src/layouts/BaseLayout.astro` | The page frame: head tags, header nav, footer |
-| `src/components/` | Cards, tags, status, Mermaid, the side rail, the theme showcase |
+| `src/components/` | Cards, tags, status, Mermaid, the home page's side rail, the theme showcase |
 | `src/lib/` | Content helpers, and the themes repo reader |
 | `src/styles/` | The site's tokens and styles, and code block styles |
 | `themes/` | The themes repo (submodule) |
