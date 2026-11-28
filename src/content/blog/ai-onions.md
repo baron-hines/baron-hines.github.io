@@ -100,7 +100,7 @@ Most of the 15.0% wasn't malformed calls. When I sorted the 181 errors by kind, 
 | Arguments that weren't valid JSON | 15 |
 | File too big for one Read | 11 |
 
-The worktree refusals are the strangest. Each session works in its own git worktree, and Claude Code refuses commands it can't prove stay inside it. DeepSeek kept writing `cd "C:/…/worktrees/<name>" && …`, changing into the folder it was already in, and Claude Code refused the whole command each time. Claude doesn't write commands like that, so the guard had never been a problem before. Neither side was broken. DeepSeek writes commands in a way Claude Code wasn't built to expect. A five-line note appended to the system prompt now tells it not to `cd`, to use relative paths and to run one command per call.
+The worktree refusals are the strangest. Each session works in its own git worktree, and Claude Code refuses commands it can't prove stay inside it. DeepSeek kept starting commands with `cd <its own worktree> && …`, changing into the folder it was already in, and Claude Code refused the whole command each time. Claude doesn't write commands like that, so the guard had never been a problem before. Neither side was broken. DeepSeek writes commands in a way Claude Code wasn't built to expect. A five-line note appended to the system prompt now tells it not to `cd`, to use relative paths and to run one command per call.
 
 ## The loop
 
