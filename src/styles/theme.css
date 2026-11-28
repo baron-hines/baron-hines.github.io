@@ -539,7 +539,9 @@ button:focus-visible {
 /* ---- Prose (rendered Markdown) ---- */
 .prose img { max-width: 100%; height: auto; }
 /* Reading width and leading for running text; tables and code keep the full column. */
-.prose :is(p, li, blockquote) { max-width: var(--measure); line-height: var(--prose-leading); }
+/* Not inside diagrams: Mermaid sizes its label boxes from text measured
+   outside .prose, so prose leading there makes labels overflow and clip. */
+.prose :is(p, li, blockquote):not(.diagram *) { max-width: var(--measure); line-height: var(--prose-leading); }
 .prose blockquote {
   padding: 4px 0 4px 16px;
   color: var(--fg-muted);
